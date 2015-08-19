@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS commit;
+DROP TABLE IF EXISTS filechurn;
