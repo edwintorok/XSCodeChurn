@@ -10,13 +10,13 @@ username:=$(call config,'username')
 password:=$(call config,'password')
 #git param
 remote:=$(call config,'remote')
-localdir:==$(call config,'localdir')
+localdir:=$(call config,'localdir')
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
 all: login
-gitclone:
-	./gitclone.sh $(remote) $(localdir)  < gitrepos.csv
+gitsync:
+	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
