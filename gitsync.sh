@@ -1,3 +1,4 @@
+#!/bin/sh
 #Sync a git repo, either by clone or pull
 #$1: remote
 #$2: local dir
@@ -10,7 +11,7 @@ do
 	repo=`echo $LINE | cut -d, -f1`
 	remote=$1/$repo
 	dir=$2/$repo
-	if [ -e $dir ]    # string1 has not been declared or initialized.
+	if [ -e $dir ]
 	then
 		git -C $dir pull origin	
 	else

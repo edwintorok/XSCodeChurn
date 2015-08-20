@@ -17,6 +17,8 @@ ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
 all: login
 gitsync:
 	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
+gitlog:
+	./gitlog.sh $(remote) $(localdir)  < gitrepos.csv
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:

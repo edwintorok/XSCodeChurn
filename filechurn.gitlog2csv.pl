@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+my $repo= "$ARGV[$0]";
 my $uuid;
 while(<>){
 #skip blank lines
