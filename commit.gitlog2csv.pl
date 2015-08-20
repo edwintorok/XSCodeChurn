@@ -12,9 +12,8 @@ while(<$fd>){
 #any non-uuid, preprend uuid, add commas
 	my ($uuid,$author,$date,$summary)=split(',');
 	my ($jiratype,$jiraid)=('###','###');
-#	$summary ~= /^.*?(CA|CP|XOP|SCTX)-(\d*?)/;
-	if($summary =~ /^(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*)/){
-		($jiratype,$jiraid)=($1,$2);}
+	if($summary =~ /^.*?(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*)/i){
+		($jiratype,$jiraid)=($1,uc $2);}
 	print "$uuid,$repo,$author,$date,$jiratype,$jiraid,$summary\n";
 }
 exit 0;

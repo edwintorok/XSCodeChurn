@@ -25,4 +25,6 @@ initdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.table.sql
 	$(PSQLPass) ; $(ConnectToPSQL) -f commit.table.sql
 resetdb:
-	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql	
+	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
+clean:
+	rm -f $(localdir)/*.log $(localdir)/*.csv
