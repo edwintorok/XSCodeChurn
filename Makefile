@@ -14,7 +14,7 @@ localdir:=$(call config,'localdir')
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
-all: login
+all: initdb gitlog copytables
 gitsync:
 	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
 gitlog:
@@ -22,9 +22,15 @@ gitlog:
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
-	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.table.sql
-	$(PSQLPass) ; $(ConnectToPSQL) -f commit.table.sql
+	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.createtable.sql
+	$(PSQLPass) ; $(ConnectToPSQL) -f commit.createtable.sql
+copytables:
+	echo "\copy commit from $(localdir)/commit.xen-api.git.csv WITH CSV;" > $(localdir)/tmp.sql
+	echo "\copy filechurn from $(localdir)/filechurn.xen-api.git.csv WITH CSV;" >> $(localdir)/tmp.sql
+	$(PSQLPass) ; $(ConnectToPSQL) -f $(localdir)/tmp.sql
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
-clean:
-	rm -f $(localdir)/*.log $(localdir)/*.csv
+clean: resetdb
+	rm -f $(localdir)/*.csv
+reallyclean:
+	rm -f $(localdir)/*.log

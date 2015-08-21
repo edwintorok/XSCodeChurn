@@ -9,11 +9,16 @@ while(<$fd>){
 	chomp;
 #skip blank lines
 	/^\s*$/ and next;
+#strip non ascii chars
+	s/[[:^ascii:]]//g;
+#strip chars, which psql misinterpret
+	s/["']//g;
 #any non-uuid, preprend uuid, add commas
 	my ($uuid,$author,$date,$summary)=split(',');
-	my ($jiratype,$jiraid)=('###','###');
-	if($summary =~ /^.*?(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*)/i){
+	my ($jiratype,$jiraid)=('###',0);
+	if($summary =~ /^.*?(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*).*?$/i){
 		($jiratype,$jiraid)=($1,uc $2);}
-	print "$uuid,$repo,$author,$date,$jiratype,$jiraid,$summary\n";
+	my $tmp=substr $summary,0,80;
+	print "$uuid,$repo,$author,$date,$jiratype,$jiraid,$tmp\n";
 }
 exit 0;
