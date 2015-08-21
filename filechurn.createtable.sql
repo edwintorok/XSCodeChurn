@@ -3,6 +3,5 @@ CREATE TABLE filechurn (
 	added integer,
 	remvd integer,
 	churn integer,
-	filename varchar(120),
-	PRIMARY KEY(uuid)
+	filename varchar(120)
 );
