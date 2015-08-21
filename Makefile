@@ -25,12 +25,14 @@ initdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.createtable.sql
 	$(PSQLPass) ; $(ConnectToPSQL) -f commit.createtable.sql
 copytables:
-	echo "\copy commit from $(localdir)/commit.xen-api.git.csv WITH CSV;" > $(localdir)/tmp.sql
-	echo "\copy filechurn from $(localdir)/filechurn.xen-api.git.csv WITH CSV;" >> $(localdir)/tmp.sql
-	$(PSQLPass) ; $(ConnectToPSQL) -f $(localdir)/tmp.sql
+	$(PSQLPass); ./gitcopytables.sh $(localdir) $(host) $(dbname) $(username) < gitrepos.csv
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
 clean: resetdb
 	rm -f $(localdir)/*.csv
 reallyclean:
 	rm -f $(localdir)/*.log
+test:
+	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"a
+test2:
+	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit where jiratype='CA' order by date desc;"

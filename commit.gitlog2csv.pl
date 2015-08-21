@@ -19,6 +19,6 @@ while(<$fd>){
 	if($summary =~ /^.*?(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*).*?$/i){
 		($jiratype,$jiraid)=($1,uc $2);}
 	my $tmp=substr $summary,0,80;
-	print "$uuid,$repo,$author,$date,$jiratype,$jiraid,$tmp\n";
+	print "$uuid,$author,$date,$jiratype,$jiraid,$tmp\n";
 }
 exit 0;

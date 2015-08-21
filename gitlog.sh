@@ -8,6 +8,7 @@ do
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
+	echo "Processing $LINE..."
 	repo=`echo $LINE | cut -d, -f1`
 	remote=$1/$repo
 	dir=$2/$repo
