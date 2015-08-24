@@ -32,7 +32,10 @@ clean: resetdb
 	rm -f $(localdir)/*.csv
 reallyclean:
 	rm -f $(localdir)/*.log
-test:
+%:
+	$(PSQLPass) ; $(ConnectToPSQL)  -f $@.sql > out.txt
+test1:
+	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
 test2:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit where jiratype='CA' order by date desc;"
