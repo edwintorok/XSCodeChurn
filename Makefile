@@ -16,23 +16,25 @@ PSQLPass=export PGPASSWORD=$(password)
 ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(localdir)/filerepomap.csv
-filelocmap=$(localdir)/filelocmap.csv
-all: initdb gitlog $(filerepomap) copytables
+filemap=$(localdir)/filemap.csv
+all: initdb gitlog filerepomap filemap copytables
 gitsync:
 	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
 gitlog:
 	./gitlog.sh $(remote) $(localdir)  < gitrepos.csv
 filerepomap:
 	./genfilerepomap.sh $(localdir) < gitrepos.csv > $(filerepomap)
-filelocmap:
-	./genfilelocmap.sh $(localdir) < $(filerepomap) > $(filelocmap)
+filemap:
+	./genfilemap.sh $(localdir) < $(filerepomap) > $(filemap)
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.createtable.sql
 	$(PSQLPass) ; $(ConnectToPSQL) -f commit.createtable.sql
+	$(PSQLPass) ; $(ConnectToPSQL) -f filemap.createtable.sql 
 copytables:
 	$(PSQLPass); ./gitcopytables.sh $(localdir) $(host) $(dbname) $(username) < gitrepos.csv
+	$(PSQLPass); ./copyfilemaptable.sh $(localdir) $(host) $(dbname) $(username)
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
 clean: resetdb
@@ -41,8 +43,8 @@ reallyclean:
 	rm -f $(localdir)/*.log
 testsql:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
-test: filelocmap
-
+test: 
+	$(PSQLPass); ./copyfilemaptable.sh $(localdir) $(host) $(dbname) $(username)
 %:
 	$(PSQLPass) ; $(ConnectToPSQL)  -f $@.sql > out.txt
 

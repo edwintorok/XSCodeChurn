@@ -1,2 +1,3 @@
 DROP TABLE IF EXISTS commit;
 DROP TABLE IF EXISTS filechurn;
+DROP TABLE IF EXISTS filemap;

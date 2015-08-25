@@ -5,7 +5,7 @@
 while read LINE 
 do  
 #skip comments
-	echo $LINE | grep '^#' && continue
+	echo $LINE | grep -q '^#' && continue
 #process line 
 	repo=`echo $LINE | cut -d, -f1`
 	filename=`echo $LINE | cut -d, -f2`
