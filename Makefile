@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-.PHONY: login
+.PHONY: login gitlog initdb copytables resetdb clean reallyclean filerepomap
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 configFile:=$(SELF_DIR)/.config
 #PostgreSQL server params, read from .config file
@@ -14,11 +14,18 @@ localdir:=$(call config,'localdir')
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
-all: initdb gitlog copytables
+#targets
+filerepomap=$(localdir)/filerepomap.csv
+filelocmap=$(localdir)/filelocmap.csv
+all: initdb gitlog $(filerepomap) copytables
 gitsync:
 	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
 gitlog:
 	./gitlog.sh $(remote) $(localdir)  < gitrepos.csv
+filerepomap:
+	./genfilerepomap.sh $(localdir) < gitrepos.csv > $(filerepomap)
+filelocmap:
+	./genfilelocmap.sh $(localdir) < $(filerepomap) > $(filelocmap)
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
@@ -32,10 +39,10 @@ clean: resetdb
 	rm -f $(localdir)/*.csv
 reallyclean:
 	rm -f $(localdir)/*.log
+testsql:
+	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
+test: filelocmap
+
 %:
 	$(PSQLPass) ; $(ConnectToPSQL)  -f $@.sql > out.txt
-test1:
-	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
-	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
-test2:
-	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit where jiratype='CA' order by date desc;"
+
