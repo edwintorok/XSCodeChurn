@@ -13,7 +13,9 @@ do
 	dir=$2/$repo
 	if [ -e $dir ]
 	then
-		git -C $dir pull origin	
+		pushd $dir
+		git pull origin	
+		popd
 	else
 		git clone $remote $dir
 	fi
