@@ -1,0 +1,46 @@
+#from api.mk
+xen-api
+#from api-libs.mk
+xen-api-libs-specs.git
+xen-api-libs-transitional.git
+libvhd.git
+ocaml-xen-lowlevel-libs.git
+ocaml-xenstore-clients.git
+xenops.git
+xcp-networkd.git
+xenopsd.git
+xcp-rrdd.git
+squeezed.git
+vhdd.git
+vhd-tool.git
+ffs.git
+rrd-transport.git
+ocaml-rrdd-plugin.git
+xenvm.git
+#from ocaml.mk
+forkexecd.git
+message-switch.git
+camldm.git
+cdrom.git
+ocaml-crc.git
+ocaml-fd-send-recv.git
+mlvm.git
+netdev.git
+ocaml-netlink.git
+ocaml-opasswd.git
+ocaml-pci.git
+ocaml-qmp.git
+ocaml-sha.git
+stdext.git
+tapctl.git
+ocaml-tar.git
+ocaml-vhd.git
+xcp-idl.git
+xcp-inventory.git
+xcp-rrd.git
+xen-api-client.git
+ocaml-xenstore.git
+sm-cli.git
+xenops-cli.git
+shared-block-ring.git
+mirage-block-volume.git
