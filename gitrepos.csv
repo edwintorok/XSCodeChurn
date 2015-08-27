@@ -1,5 +1,5 @@
 #from api.mk
-xen-api
+xen-api.git
 #from api-libs.mk
 xen-api-libs-specs.git
 xen-api-libs-transitional.git
