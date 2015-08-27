@@ -31,13 +31,14 @@ login:
 initdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f schema.sql
 copytables:
-	$(PSQLPass); ./gitcopytables.sh $(localdir) $(host) $(dbname) $(username) < gitrepos.csv
-	$(PSQLPass); ./copyfilemaptable.sh $(localdir) $(host) $(dbname) $(username)
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy commit from $(localdir)/commit.git.csv with CSV;" 
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy filechurn from  $(localdir)/filechurn.git.csv with CSV;"
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy filemap from $(localdir)/filemap.csv WITH CSV;" 
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
 clean: resetdb
 	rm -f $(localdir)/*.csv
-reallyclean:
+reallyclean: clean
 	rm -f $(localdir)/*.log
 testsql:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"

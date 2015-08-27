@@ -3,6 +3,7 @@
 #$1: remote
 #$2: local dir
 #stdin: list of repos
+rm -f $2/filechurn.log $2/commit.log $2/filechurn.csv $2/commit.csv
 while read LINE 
 do  
 #skip comments
@@ -14,12 +15,12 @@ do
 	dir=$2/$repo
 #invoke git log
 	pushd $dir
-	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:'%H' > $2/filechurn.$repo.log
-	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:'%H,%an,%ad,%s' > $2/commit.$repo.log
+	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H,$repo" >> $2/filechurn.git.log
+	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H,$repo,%an,%ad,%s" >> $2/commit.git.log
 	popd
-#translate to .csv
-	./filechurn.gitlog2csv.pl $2/filechurn.$repo.log > $2/filechurn.$repo.csv  
-	./commit.gitlog2csv.pl $repo $2/commit.$repo.log > $2/commit.$repo.csv
 done 
+#translate to .csv
+	cat $2/filechurn.git.log | sort | uniq | ./filechurn.gitlog2csv.pl > $2/filechurn.git.csv  
+	cat $2/commit.git.log | sort | uniq | ./commit.gitlog2csv.pl > $2/commit.git.csv
 exit 0
 

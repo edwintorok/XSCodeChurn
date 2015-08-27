@@ -6,5 +6,5 @@ from filechurn
 full join filemap on filechurn.filename = filemap.filename
 where filechurn.uuid in 
 	(select uuid from commit where jiratype='CA')
-group by filechurn.filename,filemap.loc
+group by filechurn.uuid,filechurn.repo,filechurn.filename,filemap.loc
 order by count desc;

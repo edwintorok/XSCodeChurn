@@ -1,14 +1,16 @@
 CREATE TABLE commit (
 	uuid char(40),
+	repo varchar(60),
 	author varchar(60),
 	date date,
 	jiratype varchar(4),
 	jiraid integer,
 	summary char(80),
-	PRIMARY KEY(uuid)
+	PRIMARY KEY(repo,uuid)
 );
 CREATE TABLE filechurn (
 	uuid char(40),
+	repo varchar(60),
 	added integer,
 	remvd integer,
 	churn integer,
