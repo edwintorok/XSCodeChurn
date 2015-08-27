@@ -29,9 +29,7 @@ filemap:
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
-	$(PSQLPass) ; $(ConnectToPSQL) -f filechurn.createtable.sql
-	$(PSQLPass) ; $(ConnectToPSQL) -f commit.createtable.sql
-	$(PSQLPass) ; $(ConnectToPSQL) -f filemap.createtable.sql 
+	$(PSQLPass) ; $(ConnectToPSQL) -f schema.sql
 copytables:
 	$(PSQLPass); ./gitcopytables.sh $(localdir) $(host) $(dbname) $(username) < gitrepos.csv
 	$(PSQLPass); ./copyfilemaptable.sh $(localdir) $(host) $(dbname) $(username)
