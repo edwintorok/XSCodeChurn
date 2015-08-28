@@ -9,7 +9,8 @@ while(<>){
 #strip chars, which psql misinterpret
 	s/["']//g;
 #record uuid and repo
-	/^([[:xdigit:]]{40}),(.*?)$/ and $uuid=$1 and $repo=$2 and next;
+	if(/^([[:xdigit:]]{40}),(.*?)$/) 
+		{$uuid=$1;$repo=$2;next;}
 #any non-uuid, preprend uuid, add commas
 	my ($plus,$minus,$filename)=split(' ');
 #fixup any git special format

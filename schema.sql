@@ -6,7 +6,7 @@ CREATE TABLE commit (
 	jiratype varchar(4),
 	jiraid integer,
 	summary char(80),
-	PRIMARY KEY(repo,uuid)
+	CONSTRAINT pkey PRIMARY KEY(repo,uuid)
 );
 CREATE TABLE filechurn (
 	uuid char(40),

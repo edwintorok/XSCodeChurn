@@ -43,7 +43,7 @@ reallyclean: clean
 testsql:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
 test: 
-	$(PSQLPass); ./copyfilemaptable.sh $(localdir) $(host) $(dbname) $(username)
+	$(PSQLPass);  $(ConnectToPSQL)  -f listrepos.sql
 %:
 	$(PSQLPass) ; $(ConnectToPSQL)  -f $@.sql > out.txt
 

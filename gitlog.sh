@@ -3,7 +3,7 @@
 #$1: remote
 #$2: local dir
 #stdin: list of repos
-rm -f $2/filechurn.log $2/commit.log $2/filechurn.csv $2/commit.csv
+rm -f $2/filechurn.git.log $2/commit.git.log $2/filechurn.git.csv $2/commit.git.csv
 while read LINE 
 do  
 #skip comments
@@ -20,7 +20,7 @@ do
 	popd
 done 
 #translate to .csv
-	cat $2/filechurn.git.log | sort | uniq | ./filechurn.gitlog2csv.pl > $2/filechurn.git.csv  
-	cat $2/commit.git.log | sort | uniq | ./commit.gitlog2csv.pl > $2/commit.git.csv
+	cat $2/filechurn.git.log | ./filechurn.gitlog2csv.pl > $2/filechurn.git.csv  
+	cat $2/commit.git.log | ./commit.gitlog2csv.pl > $2/commit.git.csv
 exit 0
 
