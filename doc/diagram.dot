@@ -1,0 +1,17 @@
+digraph diagram{
+rankdir=LR;
+node [shape=plaintext,fillcolor="cadetblue1",style=filled];
+data01 [label="remote/local\ngit repos"];
+data02 [label="filesystem\nworkingdir"];
+data03 [label="commit.git.csv\nfilechurn.git.csv"];
+data04 [label="filerepomap.csv"];
+data05 [label="filemap.csv"];
+data06 [label="SQL DB"];
+data01 -> data02 [label="gitsync.sh"];
+data02 -> data03 [label="gitlog.sh"];
+data02 -> data04 [label="genfilerepomap.sh"];
+data04 -> data05 [label="genfilemap.sh"];
+data03 -> data06 [label="Makefile\ncopytables"];
+data05 -> data06 [label="Makefile\ncopytables"];
+{rank=same; data03 data05}
+}
