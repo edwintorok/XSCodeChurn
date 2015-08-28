@@ -9,37 +9,37 @@ dbname:=$(call config,'dbname')
 username:=$(call config,'username')
 password:=$(call config,'password')
 #git param
-remote:=$(call config,'remote')
-localdir:=$(call config,'localdir')
+workingdir:=$(call config,'workingdir')
+gitrepolist:=gitrepos.csv
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
-filerepomap=$(localdir)/filerepomap.csv
-filemap=$(localdir)/filemap.csv
+filerepomap=$(workingdir)/filerepomap.csv
+filemap=$(workingdir)/filemap.csv
 all: initdb gitlog filerepomap filemap copytables
 gitsync:
-	./gitsync.sh $(remote) $(localdir)  < gitrepos.csv
+	./gitsync.sh $(workingdir)  < $(gitrepolist)
 gitlog:
-	./gitlog.sh $(remote) $(localdir)  < gitrepos.csv
+	./gitlog.sh $(workingdir)  < $(gitrepolist)
 filerepomap:
-	./genfilerepomap.sh $(localdir) < gitrepos.csv > $(filerepomap)
+	./genfilerepomap.sh $(workingdir) < $(gitrepolist) > $(filerepomap)
 filemap:
-	./genfilemap.sh $(localdir) < $(filerepomap) > $(filemap)
+	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
 login:
 	$(PSQLPass) ; $(ConnectToPSQL)
 initdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f schema.sql
 copytables:
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy commit from $(localdir)/commit.git.csv with CSV;" 
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy filechurn from  $(localdir)/filechurn.git.csv with CSV;"
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy filemap from $(localdir)/filemap.csv WITH CSV;" 
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
 clean: resetdb
-	rm -f $(localdir)/*.csv
+	rm -f $(workingdir)/*.csv
 reallyclean: clean
-	rm -f $(localdir)/*.log
+	rm -f $(workingdir)/*.log
 testsql:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
 test: 

@@ -1,26 +1,28 @@
 #!/bin/sh
 #invoke git log on a set of repo
-#$1: remote
-#$2: local dir
+#$1: local dir
 #stdin: list of repos
-rm -f $2/filechurn.git.log $2/commit.git.log $2/filechurn.git.csv $2/commit.git.csv
+commitlog=$1/commit.git.log
+commitcsv=$1/commit.git.csv
+filechurnlog=$1/filechurn.git.log
+filechurncsv=$1/filechurn.git.csv
+rm -f $commitlog $commitcsv $filechurnlog $filelchurncsv
 while read LINE 
 do  
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
 	echo "Processing $LINE..."
-	repo=`echo $LINE | cut -d, -f1`
-	remote=$1/$repo
-	dir=$2/$repo
+	repo=`echo $LINE | cut -d, -f2`
+	dir=$1/$repo
 #invoke git log
 	pushd $dir
-	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H,$repo" >> $2/filechurn.git.log
-	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H,$repo,%an,%ad,%s" >> $2/commit.git.log
+	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H,$repo" >> $filechurnlog
+	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H,$repo,%an,%ad,%s" >> $commitlog
 	popd
 done 
 #translate to .csv
-	cat $2/filechurn.git.log | ./filechurn.gitlog2csv.pl > $2/filechurn.git.csv  
-	cat $2/commit.git.log | ./commit.gitlog2csv.pl > $2/commit.git.csv
+	cat $filechurnlog | ./filechurn.gitlog2csv.pl > $filechurncsv  
+	cat $commitlog | ./commit.gitlog2csv.pl > $commitcsv
 exit 0
 
