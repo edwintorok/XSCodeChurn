@@ -16,6 +16,12 @@ CREATE TABLE filechurn (
 	churn integer,
 	filename varchar(120)
 );
+CREATE TABLE chunk (
+	uuid char(40),
+	repo varchar(60),
+	filename varchar(120),
+	context varchar(120)
+);
 CREATE TABLE filemap (
 	repo varchar(60),
 	filename varchar(255),
