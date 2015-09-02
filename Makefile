@@ -13,7 +13,7 @@ workingdir:=$(call config,'workingdir')
 gitrepolist:=gitrepos.csv
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
-ConnectToPSQL=psql --host=$(host) --dbname=$(dbname) --username=$(username)
+PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
@@ -27,23 +27,23 @@ filerepomap:
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
 login:
-	$(PSQLPass) ; $(ConnectToPSQL)
+	$(PSQL)
 initdb:
-	$(PSQLPass) ; $(ConnectToPSQL) -f schema.sql
+	$(PSQL) -f schema.sql
 copytables:
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
-	$(PSQLPass); $(ConnectToPSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
+	$(PSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
+	$(PSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
+	$(PSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
+	$(PSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
 resetdb:
-	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
+	$(PSQL) -f reset.table.sql
 clean: resetdb
 	rm -f $(workingdir)/*.csv *.html
 reallyclean: clean
 	rm -f $(workingdir)/*.log
 test:
-	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
+	$(PSQL) -c "select * from commit order by date desc;"
 %.html: %.sql
-	$(PSQLPass) ; $(ConnectToPSQL)  -H -f $< > $@
+	$(PSQL)  -H -f $< -o $@
 	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@
 
