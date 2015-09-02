@@ -33,17 +33,17 @@ initdb:
 copytables:
 	$(PSQLPass); $(ConnectToPSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
 	$(PSQLPass); $(ConnectToPSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
+	$(PSQLPass); $(ConnectToPSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
 	$(PSQLPass); $(ConnectToPSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
 resetdb:
 	$(PSQLPass) ; $(ConnectToPSQL) -f reset.table.sql
 clean: resetdb
-	rm -f $(workingdir)/*.csv
+	rm -f $(workingdir)/*.csv *.html
 reallyclean: clean
 	rm -f $(workingdir)/*.log
-testsql:
+test:
 	$(PSQLPass) ; $(ConnectToPSQL) -c "select * from commit order by date desc;"
-test: 
-	$(PSQLPass);  $(ConnectToPSQL)  -f listrepos.sql
-%:
-	$(PSQLPass) ; $(ConnectToPSQL)  -f $@.sql > out.txt
+%.html: %.sql
+	$(PSQLPass) ; $(ConnectToPSQL)  -H -f $< > $@
+	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@
 
