@@ -1,7 +1,7 @@
 CREATE TABLE commit (
 	uuid char(40),
-	repo varchar(60),
-	author varchar(60),
+	repo varchar(120),
+	author varchar(120),
 	date date,
 	jiratype varchar(4),
 	jiraid integer,
@@ -10,7 +10,7 @@ CREATE TABLE commit (
 );
 CREATE TABLE filechurn (
 	uuid char(40),
-	repo varchar(60),
+	repo varchar(120),
 	added integer,
 	remvd integer,
 	churn integer,
@@ -18,13 +18,25 @@ CREATE TABLE filechurn (
 );
 CREATE TABLE chunk (
 	uuid char(40),
-	repo varchar(60),
+	repo varchar(120),
 	filename varchar(120),
 	context varchar(120)
 );
 CREATE TABLE filemap (
-	repo varchar(60),
+	repo varchar(120),
 	filename varchar(255),
-	extension varchar(60),
+	extension varchar(120),
 	loc integer
+);
+CREATE TABLE compmap (
+	repo varchar(120),
+	comp varchar(120)
+);
+CREATE TABLE travisci (
+	repo varchar(120),
+	url varchar(255)
+);
+CREATE TABLE coveralls (
+	repo varchar(120),
+	url varchar(255)
 );

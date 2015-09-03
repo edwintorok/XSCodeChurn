@@ -1,6 +1,3 @@
--- Filenames changed by CAs
--- with total code churn
--- ranked by number of CAs involved
-select  repo from commit
-group by repo
+-- list all repos
+select  distinct repo from compmap
 order by repo asc;

@@ -17,6 +17,7 @@ PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
+repocompmap=$(workingdir)/repocompmap.csv
 all: initdb gitlog filerepomap filemap copytables
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepolist)
@@ -26,6 +27,8 @@ filerepomap:
 	./genfilerepomap.sh $(workingdir) < $(gitrepolist) > $(filerepomap)
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
+repocompmap:
+	./genrepo2componentmap.sh $(workingdir) > $(repocompmap)
 login:
 	$(PSQL)
 initdb:
@@ -35,6 +38,9 @@ copytables:
 	$(PSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
 	$(PSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
 	$(PSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
+	$(PSQL) -c "\copy compmap from $(workingdir)/repocompmap.csv WITH CSV;" 
+	$(PSQL) -c "\copy travisci from $(workingdir)/travis-ci.csv WITH CSV;" 
+	$(PSQL) -c "\copy coveralls from $(workingdir)/coveralls.csv WITH CSV;" 
 resetdb:
 	$(PSQL) -f reset.table.sql
 clean: resetdb
