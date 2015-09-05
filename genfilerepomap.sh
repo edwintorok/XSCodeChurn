@@ -7,7 +7,7 @@ do
 #skip comments
 	echo $LINE | grep -q '^#' && continue
 #process line 
-	repo=`echo $LINE | cut -d, -f2`
+	repo=`echo $LINE | cut -d, -f3`
 	dir=$1/$repo
 	find $dir -not -path '*/\.git*' -type f -printf "$repo,%P\n"
 done 

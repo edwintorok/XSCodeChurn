@@ -1,7 +1,5 @@
 -- diff chunks changed by CAs
 -- ranked by number of CAs involved
-
--- set output to html
 select c.context,c.filename,c.repo,count(c.uuid) as count
 from filemap m, chunk c
 -- filters on CA

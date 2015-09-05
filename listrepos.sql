@@ -1,3 +1,3 @@
 -- list all repos
-select  distinct repo from compmap
-order by repo asc;
+select  distinct name from repos
+order by name asc;

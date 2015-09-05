@@ -15,7 +15,7 @@ do
 	extension="${barename##*.}"
 	[ "$extension" == "$barename" ] && extension='NIL'
 #find loc
-	loc=`cat $1/$repo/$filename|wc -l`
+	loc=`cat "$1/$repo/$filename"|wc -l`
 #output result
 	echo "$repo,$filename,$extension,$loc"
 done 

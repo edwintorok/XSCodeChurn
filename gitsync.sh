@@ -7,9 +7,10 @@ do
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
-	remote=`echo $LINE | cut -d, -f1`
-	repo=`echo $LINE | cut -d, -f2`
+	remote=`echo $LINE | cut -d, -f2`
+	repo=`echo $LINE | cut -d, -f3`
 	dir=$1/$repo
+#echo  "$remote/$repo $dir"
 	if [ -e $dir ]
 	then
 		pushd $dir

@@ -14,19 +14,19 @@ do
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
-	echo "Processing $LINE..."
-	repo=`echo $LINE | cut -d, -f2`
+	repo=`echo $LINE | cut -d, -f3`
+	echo "Processing $repo..."
 	dir=$1/$repo
-#invoke git log
+#invoke git log - generate tab delimited output
 	pushd $dir
-	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H,$repo" >> $filechurnlog
-	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H,$repo,%an,%ad,%s" >> $commitlog
-	git log --encoding=UTF-8 -p --no-merges --pretty=format:"repo,$repo,uuid,%H" >> $chunklog
+	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H%x09$repo%x09%an%x09%ad%x09%s" >> $commitlog
+	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H%x09$repo" >> $filechurnlog
+	git log --encoding=UTF-8 -p --no-merges --pretty=format:"repo%x09$repo%x09uuid%x09%H" >> $chunklog
 	popd
 done 
 #translate to .csv
+	sort $commitlog | uniq | ./commit.gitlog2csv.pl > $commitcsv
 	cat $filechurnlog | ./filechurn.gitlog2csv.pl > $filechurncsv  
-	cat $commitlog | ./commit.gitlog2csv.pl > $commitcsv
 	cat $chunklog | ./chunk.gitlog2csv.pl > $chunkcsv
 exit 0
 

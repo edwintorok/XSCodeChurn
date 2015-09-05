@@ -10,25 +10,34 @@ username:=$(call config,'username')
 password:=$(call config,'password')
 #git param
 workingdir:=$(call config,'workingdir')
-gitrepolist:=gitrepos.csv
+gitrepos:=$(workingdir)/gitrepos.csv
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-repocompmap=$(workingdir)/repocompmap.csv
-all: initdb gitlog filerepomap filemap copytables
+repos=$(workingdir)/repos.csv
+travis-ci=$(workingdir)/travis-ci.csv
+coveralls=$(workingdir)/coveralls.csv
+queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html
+all: initdb $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
+$(repos):
+	grep -v '^#' gitrepos.csv > $@
+#	./genrepo2componentmap.sh $(workingdir) > $(repos)
+$(gitrepos): $(repos)
+	cp gitrepos.csv $@
+#	grep '.git$$' $< | sed 's/http:/git:/' > $@
+$(travis-ci) $(coveralls):
+	wget http://dart.uk.xensource.com/codechurn/$(@F) -O $@
 gitsync:
-	./gitsync.sh $(workingdir)  < $(gitrepolist)
+	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
-	./gitlog.sh $(workingdir)  < $(gitrepolist)
+	./gitlog.sh $(workingdir)  < $(gitrepos)
 filerepomap:
-	./genfilerepomap.sh $(workingdir) < $(gitrepolist) > $(filerepomap)
+	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $(filerepomap)
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
-repocompmap:
-	./genrepo2componentmap.sh $(workingdir) > $(repocompmap)
 login:
 	$(PSQL)
 initdb:
@@ -37,18 +46,22 @@ copytables:
 	$(PSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
 	$(PSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
 	$(PSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
-	$(PSQL) -c "\copy filemap from $(workingdir)/filemap.csv WITH CSV;" 
-	$(PSQL) -c "\copy compmap from $(workingdir)/repocompmap.csv WITH CSV;" 
-	$(PSQL) -c "\copy travisci from $(workingdir)/travis-ci.csv WITH CSV;" 
-	$(PSQL) -c "\copy coveralls from $(workingdir)/coveralls.csv WITH CSV;" 
+	$(PSQL) -c "\copy filemap from $(filemap) WITH CSV;" 
+	$(PSQL) -c "\copy repos from $(repos) WITH CSV;" 
+	$(PSQL) -c "\copy travisci from $(travis-ci) WITH CSV;" 
+	$(PSQL) -c "\copy coveralls from $(coveralls) WITH CSV;" 
 resetdb:
 	$(PSQL) -f reset.table.sql
+db: resetdb initdb copytables
+	@echo 'Rebuilding Database...'
+qdb: $(queries)
+	@echo 'Querying the db...' 
 clean: resetdb
 	rm -f $(workingdir)/*.csv *.html
 reallyclean: clean
 	rm -f $(workingdir)/*.log
-test:
-	$(PSQL) -c "select * from commit order by date desc;"
+test: 
+	echo $(queries)
 %.html: %.sql
 	$(PSQL)  -H -f $< -o $@
 	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@

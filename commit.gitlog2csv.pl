@@ -7,10 +7,10 @@ while(<>){
 	/^\s*$/ and next;
 #strip non ascii chars
 	s/[[:^ascii:]]//g;
-#strip single and double quotes, which psql misinterpret
-	s/["']//g;
+#strip all chars which trip the csv psql import
+	s/["',]//g;
 #extract jira object
-	my ($uuid,$repo,$author,$date,$summary)=split(',');
+	my ($uuid,$repo,$author,$date,$summary)=split(/\t/);
 	my ($jiratype,$jiraid)=('###',0);
 	if($summary =~ /^.*?(CA|CP|XOP|SCTX|HFX|HFP|CAR)-([0-9]*).*?$/i){
 		($jiratype,$jiraid)=(uc $1,$2);}
