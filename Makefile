@@ -21,6 +21,7 @@ repos=$(workingdir)/repos.csv
 travis-ci=$(workingdir)/travis-ci.csv
 coveralls=$(workingdir)/coveralls.csv
 queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html
+queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv
 all: initdb $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
 $(repos):
 	grep -v '^#' gitrepos.csv > $@
@@ -62,6 +63,8 @@ reallyclean: clean
 	rm -f $(workingdir)/*.log
 test: 
 	echo $(queries)
+%.sql.csv: %.sql
+	$(PSQL) --field-separator="," --no-align --tuples-only -f $< -o $@
 %.html: %.sql
 	$(PSQL)  -H -f $< -o $@
 	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@
