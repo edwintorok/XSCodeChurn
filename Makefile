@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 .PHONY: login gitlog initdb copytables resetdb clean reallyclean filerepomap
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-configFile:=$(SELF_DIR)/.config
+configFile:=$(SELF_DIR)/.config.trunk
 #PostgreSQL server params, read from .config file
 config=$(lastword $(shell grep $(1) $(configFile)))
 host:=$(call config,'host')
@@ -30,7 +30,7 @@ $(gitrepos): $(repos)
 	cp gitrepos.csv $@
 #	grep '.git$$' $< | sed 's/http:/git:/' > $@
 $(travis-ci) $(coveralls):
-	wget http://dart.uk.xensource.com/codechurn/$(@F) -O $@
+	wget http://dart.uk.xensource.com/devtest/$(@F) -O $@
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
