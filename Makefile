@@ -20,8 +20,8 @@ filemap=$(workingdir)/filemap.csv
 repos=$(workingdir)/repos.csv
 travis-ci=$(workingdir)/travis-ci.csv
 coveralls=$(workingdir)/coveralls.csv
-queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html
-queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv
+queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
+queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
 all: initdb $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
 $(repos):
 	grep -v '^#' gitrepos.csv > $@
@@ -62,7 +62,7 @@ clean: resetdb
 reallyclean: clean
 	rm -f $(workingdir)/*.log
 test: 
-	echo $(queries)
+	@echo $(queries)
 %.sql.csv: %.sql
 	$(PSQL) --field-separator="," --no-align --tuples-only -f $< -o $@
 %.html: %.sql
