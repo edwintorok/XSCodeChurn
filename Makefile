@@ -11,6 +11,8 @@ password:=$(call config,'password')
 #git param
 workingdir:=$(call config,'workingdir')
 gitrepos:=$(workingdir)/gitrepos.csv
+#www params
+deploydir:=/var/www/devtest
 #psql generic methods
 PSQLPass=export PGPASSWORD=$(password)
 PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
@@ -68,4 +70,5 @@ test:
 %.html: %.sql
 	$(PSQL)  -H -f $< -o $@
 	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@
-
+deploy:
+	cp *.csv *.html *.css $(deploydir) 
