@@ -1,7 +1,13 @@
+caption { 
+	display: table-caption;
+	text-align: center;
+	font-weight: bold;
+	font-size: 150%;
+}
 table {
-    border-collapse: collapse;
+	border-spacing: 0;
+	border: 1px solid green;
+	border-collapse: collapse;
 }
-
-table, td, th {
-    border: 1px solid black;
-}
+tr:nth-child(even) {background: white}
+tr:nth-child(odd) {background: #A7C942}
