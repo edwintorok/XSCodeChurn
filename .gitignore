@@ -1,3 +1,5 @@
 .config*
 *.html
 *.sql.csv
+!index.html
+

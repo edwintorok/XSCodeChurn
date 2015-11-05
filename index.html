@@ -1,0 +1,34 @@
+<h2>XenServer dev testing reports</h2>
+This is a series of reports obtained by data mining the git repos of XenServer<br>
+The purpose is to obtain metrics to repos and direct dev test activities.
+<h3>Database metrics</h4>
+<hr>
+This shows the numbers of various records the table contains.
+<ul>
+<li><a href="stats.html">tables and #records</a></li>
+</ul>
+<h3>XenServer codechurn reports over git repos</h4>
+<hr>
+This aims to direct developpers towards files and functions, which generate most defects, hence prime candidate for dev testing.
+<ul>
+<li><a href="churn.html">code churn by file ranked by number of CAs</a>   <a href="churn.sql.csv">[csv file]</a></li>
+<li><a href="chunk.html">diff chunk (~function name) ranked by number of CA</a>   <a href="chunk.sql.csv">[csv file]</a></li>
+</ul>
+<h3>XenServer Repos inventory</h4>
+<hr>
+This shows basics metrics on XenServer repos and which use <a href="https://travis-ci.org/">travis-ci</a>and <a href="https://coveralls.io/">coveralls</a>
+<ul>
+<li><a href="inventory.html">Git repos attributes</a>   <a href="inventory.sql.csv">[csv file]</a></li>
+</ul>
+<h3>codechurn report over Xen OSS project per security advisory (XSA)</h4>
+<hr>
+<ul>
+<li><a href="https://travis-ci.org/philippegabriel/xsastats">code churn for Xen by number of XSA</a></li>
+</ul>
+<h3>Reference</h4>
+<hr>
+<ul>
+<li><a href="http://git-scm.com/docs/git-log">git log options</a></li>
+<li><a href="https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History">git log format</a></li>
+<li><a href="https://github.com/philippegabriel/XSCodeChurn">Github repo for codechurn script</a></li>
+</ul>
