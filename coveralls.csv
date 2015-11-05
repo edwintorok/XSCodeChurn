@@ -1,0 +1,6 @@
+xenvm.git,https://coveralls.io/github/xapi-project/xenvm
+sm.git,https://coveralls.io/github/xapi-project/sm
+mirage-block-volume.git,https://coveralls.io/github/mirage/mirage-block-volume
+xen-api-client.git,https://coveralls.io/github/xapi-project/xen-api-client
+shared-block-ring.git,https://coveralls.io/github/mirage/shared-block-ring
+xscontainer.git,https://coveralls.io/github/xenserver/xscontainer
