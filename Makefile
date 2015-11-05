@@ -10,6 +10,7 @@ username:=$(call config,'username')
 password:=$(call config,'password')
 #git param
 workingdir:=$(call config,'workingdir')
+repos=$(workingdir)/repos.csv
 gitrepos:=$(workingdir)/gitrepos.csv
 #www params
 deploydir:=/var/www/devtest
@@ -19,12 +20,11 @@ PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-repos=$(workingdir)/repos.csv
 travis-ci=$(workingdir)/travis-ci.csv
 coveralls=$(workingdir)/coveralls.csv
 queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
 queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
-all: initdb $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
+all: $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
 $(repos):
 	grep -v '^#' gitrepos.csv > $@
 #	./genrepo2componentmap.sh $(workingdir) > $(repos)
@@ -59,9 +59,9 @@ db: resetdb initdb copytables
 	@echo 'Rebuilding Database...'
 qdb: $(queries)
 	@echo 'Querying the db...' 
-clean: resetdb
-	rm -f $(workingdir)/*.csv *.html
-reallyclean: clean
+clean: 
+	rm -f $(queries)
+reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 test: 
 	@echo $(queries)
