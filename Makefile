@@ -20,19 +20,15 @@ PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-travis-ci=$(workingdir)/travis-ci.csv
-coveralls=$(workingdir)/coveralls.csv
 queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
 queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
-all: $(repos)  $(gitrepos) $(travis-ci) $(coveralls) gitsync gitlog filerepomap filemap copytables
+all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
 $(repos):
 	grep -v '^#' gitrepos.csv > $@
 #	./genrepo2componentmap.sh $(workingdir) > $(repos)
 $(gitrepos): $(repos)
 	cp gitrepos.csv $@
 #	grep '.git$$' $< | sed 's/http:/git:/' > $@
-$(travis-ci) $(coveralls):
-	wget http://dart.uk.xensource.com/devtest/$(@F) -O $@
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
@@ -51,8 +47,8 @@ copytables:
 	$(PSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
 	$(PSQL) -c "\copy filemap from $(filemap) WITH CSV;" 
 	$(PSQL) -c "\copy repos from $(repos) WITH CSV;" 
-	$(PSQL) -c "\copy travisci from $(travis-ci) WITH CSV;" 
-	$(PSQL) -c "\copy coveralls from $(coveralls) WITH CSV;" 
+	$(PSQL) -c "\copy travisci from travis-ci.csv WITH CSV;" 
+	$(PSQL) -c "\copy coveralls from coveralls.csv WITH CSV;" 
 resetdb:
 	$(PSQL) -f reset.table.sql
 db: resetdb initdb copytables
