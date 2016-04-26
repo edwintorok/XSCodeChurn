@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #invoke git log on a set of repo
 #$1: local dir
 #stdin: list of repos

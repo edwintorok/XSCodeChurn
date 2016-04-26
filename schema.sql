@@ -1,4 +1,4 @@
-CREATE TABLE commit (
+CREATE TABLE gitcommit (
 	uuid char(40),
 	repo varchar(120),
 	author varchar(120),
@@ -7,7 +7,7 @@ CREATE TABLE commit (
 	jiraid integer,
 	summary char(80)
 );
-CREATE INDEX commit_uuid ON commit (uuid);
+CREATE INDEX commit_uuid ON gitcommit (uuid);
 CREATE TABLE filechurn (
 	uuid char(40),
 	repo varchar(120),

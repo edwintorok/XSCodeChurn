@@ -1,5 +1,5 @@
 -- list all repos and their dev test attributes
-\pset title 'repo inventory'
+-- \pset title 'repo inventory'
 select  distinct repos.name,count(filemap.filename) as "#files", sum(filemap.loc) as "#lines code",travisci.url as "travis url",coveralls.url as "coveralls url"
 from repos
 full outer join travisci

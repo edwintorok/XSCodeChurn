@@ -14,15 +14,13 @@ repos=$(workingdir)/repos.csv
 gitrepos:=$(workingdir)/gitrepos.csv
 #www params
 deploydir:=/var/www/devtest
-#psql generic methods
-PSQLPass=export PGPASSWORD=$(password)
-PSQL=$(PSQLPass);psql --host=$(host) --dbname=$(dbname) --username=$(username)
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-queries=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
-queries+=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
-all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
+queries=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
+#queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
+#all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
+all: $(repos)  $(gitrepos)
 $(repos):
 	grep -v '^#' gitrepos.csv > $@
 #	./genrepo2componentmap.sh $(workingdir) > $(repos)
@@ -39,18 +37,19 @@ filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
 login:
 	$(PSQL)
-initdb:
-	$(PSQL) -f schema.sql
+initdb: resetdb
+	sqlite3 $(workingdir)/dbfile < schema.sql
 copytables:
-	$(PSQL) -c "\copy commit from $(workingdir)/commit.git.csv with CSV;" 
-	$(PSQL) -c "\copy filechurn from  $(workingdir)/filechurn.git.csv with CSV;"
-	$(PSQL) -c "\copy chunk from $(workingdir)/chunk.git.csv WITH CSV;" 
-	$(PSQL) -c "\copy filemap from $(filemap) WITH CSV;" 
-	$(PSQL) -c "\copy repos from $(repos) WITH CSV;" 
-	$(PSQL) -c "\copy travisci from travis-ci.csv WITH CSV;" 
-	$(PSQL) -c "\copy coveralls from coveralls.csv WITH CSV;" 
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/repos.csv repos"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/travis-ci.csv travisci"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/coveralls.csv coveralls"
+
 resetdb:
-	$(PSQL) -f reset.table.sql
+	rm -rf $(workingdir)/dbfile
 db: resetdb initdb copytables
 	@echo 'Rebuilding Database...'
 qdb: $(queries)
@@ -61,8 +60,10 @@ reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 test: 
 	@echo $(queries)
+#%.sql.csv: %.sql
+#	$(PSQL) --field-separator="," --no-align --tuples-only -f $< -o $@
 %.sql.csv: %.sql
-	$(PSQL) --field-separator="," --no-align --tuples-only -f $< -o $@
+	sqlite3 --separator , $(workingdir)/dbfile < $<
 %.html: %.sql
 	$(PSQL)  -H -f $< -o $@
 	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@

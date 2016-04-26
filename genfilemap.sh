@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #generate map repo,file,extension,loc
 #$1: local dir
 #stdin: map file,repo
