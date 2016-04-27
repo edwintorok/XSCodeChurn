@@ -1,8 +1,7 @@
 #!/usr/bin/make -f
-.PHONY: login gitlog initdb copytables resetdb clean reallyclean filerepomap
+.PHONY: gitlog initdb copytables resetdb clean reallyclean filerepomap
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 configFile:=$(SELF_DIR)/.config.trunk
-#PostgreSQL server params, read from .config file
 config=$(lastword $(shell grep $(1) $(configFile)))
 host:=$(call config,'host')
 dbname:=$(call config,'dbname')
@@ -13,12 +12,13 @@ workingdir:=$(call config,'workingdir')
 repos=$(workingdir)/repos.csv
 gitrepos:=$(workingdir)/gitrepos.csv
 #www params
-deploydir:=/var/www/devtest
+deploydir:=/var/www/pub
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-queries=CAbyFiles.sql.csv chunkbyCA.sql.csv chunk.sql.csv churn.sql.csv inventory.sql.csv listrepos.sql.csv stats.sql.csv churnbyrepo.sql.csv
-#queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html inventory.html listrepos.html stats.html churnbyrepo.html
+queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
+queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
+#queries+=inventory.html inventory.csv stats.csv stats.html
 #all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
 all: $(repos)  $(gitrepos)
 $(repos):
@@ -35,8 +35,6 @@ filerepomap:
 	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $(filerepomap)
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
-login:
-	$(PSQL)
 initdb: resetdb
 	sqlite3 $(workingdir)/dbfile < schema.sql
 copytables:
@@ -60,12 +58,12 @@ reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 test: 
 	@echo $(queries)
-#%.sql.csv: %.sql
-#	$(PSQL) --field-separator="," --no-align --tuples-only -f $< -o $@
-%.sql.csv: %.sql
-	sqlite3 --separator , $(workingdir)/dbfile < $<
+%.csv: %.sql
+	sqlite3 -init sqlite.csv.init $(workingdir)/dbfile < $< > $@
 %.html: %.sql
-	$(PSQL)  -H -f $< -o $@
-	sed -i '1s;^;<link rel="stylesheet" type="text/css" href="psql.css">\n;' $@
+	echo '<link rel="stylesheet" type="text/css" href="index.css">' > $@
+	echo '<table border="1">' >> $@
+	sqlite3 -init sqlite.html.init  $(workingdir)/dbfile < $< >> $@
+	echo '</table>' >> $@
 deploy:
 	cp *.csv *.html *.css $(deploydir) 

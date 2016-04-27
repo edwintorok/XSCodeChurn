@@ -1,6 +1,6 @@
 -- diff chunks changed by CAs
 -- ranked by number of CAs involved
--- \pset title 'commit diff chunks (~function name) ranked by #CAs'
+.print <caption>commit diff chunks (~function name) ranked by #CAs</caption>
 select ch.context,m.filename,m.repo,count(distinct ch.uuid) as "#commits",count(distinct c.jiraid) as "#CAs"
 from chunk ch
 inner join gitcommit c on ch.uuid=c.uuid and c.jiratype='CA'

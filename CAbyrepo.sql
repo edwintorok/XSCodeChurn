@@ -1,5 +1,5 @@
 -- ranked by number of CAs involved
--- \pset title 'repos by number of CAs'
+.print <caption>repos by number of CAs</caption>
 select repo,count(distinct jiraid) as "#CAs"
 from gitcommit 
 where jiratype='CA'

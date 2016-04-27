@@ -1,5 +1,5 @@
 -- files ranked by #CA
--- \pset title 'Files ranked by #CAs'
+.print <caption>Files ranked by #CAs</caption>
 select f.filename,count(distinct c.jiraid) as "#CAs"
 from filechurn f
 inner join filemap m on f.repo=m.repo and f.filename=m.filename

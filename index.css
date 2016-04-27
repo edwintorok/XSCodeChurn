@@ -9,5 +9,8 @@ table {
 	border: 1px solid green;
 	border-collapse: collapse;
 }
-tr:nth-child(even) {background: white}
-tr:nth-child(odd) {background: #A7C942}
+TR:nth-child(even) {background: white}
+TR:nth-child(odd) {background: #A7C942}
+p {
+    text-indent: 50px;
+}

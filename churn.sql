@@ -1,5 +1,5 @@
 -- files ranked by #CA
--- \pset title 'Files ranked by #CAs'
+.print <caption>Files ranked by #CAs</caption>
 select m.filename,m.repo,count(distinct f.uuid) as "#Commits",count(distinct c.jiraid) as "#CAs",sum(f.churn) as "churn (in loc)",m.loc as "#lines of code" ,round(sum(f.churn)*100/m.loc) as "% churn"
 from filemap m
 inner join filechurn f on f.repo=m.repo and f.filename=m.filename
