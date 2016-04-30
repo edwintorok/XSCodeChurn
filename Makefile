@@ -37,6 +37,8 @@ filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
 initdb: resetdb
 	sqlite3 $(workingdir)/dbfile < schema.sql
+login:
+	sqlite3 $(workingdir)/dbfile
 copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
