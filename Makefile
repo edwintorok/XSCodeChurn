@@ -16,7 +16,8 @@ deploydir:=/var/www/pub
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-queries=CAStatsByDay.csv CAStatsByMonth.csv
+queries=churnbyrepo.csv
+#queries=CAStatsByDay.csv CAStatsByMonth.csv
 #queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
 #queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
 #queries+=inventory.html inventory.csv stats.csv stats.html
@@ -61,6 +62,8 @@ reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 test: 
 	@echo $(queries)
+CAStatsByMonth.%.sql: CAStatsByMonth.sql.m4
+	m4 -D repoVar=$* $< > $@
 %.csv: %.sql
 	sqlite3 -init sqlite.csv.init $(workingdir)/dbfile < $< > $@
 %.html: %.sql
