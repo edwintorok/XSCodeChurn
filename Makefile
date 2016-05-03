@@ -16,8 +16,9 @@ deploydir:=/var/www/pub
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
-queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
-queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
+queries=CAStatsByDay.csv CAStatsByMonth.csv
+#queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
+#queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
 #queries+=inventory.html inventory.csv stats.csv stats.html
 #all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
 all: $(repos)  $(gitrepos)
