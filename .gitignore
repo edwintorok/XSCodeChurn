@@ -2,4 +2,4 @@
 *.html
 *.sql.csv
 !index.html
-
+*.png
