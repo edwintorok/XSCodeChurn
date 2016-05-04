@@ -1,0 +1,12 @@
+delete from filechurn where churn=0;
+delete from filechurn where churn > 200 ;
+delete from filechurn where filename like '%.jpg';
+delete from filechurn where filename like '%.png';
+delete from filechurn where filename like '%.gif';
+delete from filechurn where filename like '%.tex';
+delete from filechurn where filename like '%.svg';
+delete from filechurn where filename like 'doc/%';
+delete from filechurn where filename like 'docs/%';
+delete from filechurn where filename like '%/doc/%';
+delete from filechurn where filename like '%.doc';
+delete from filechurn where filename like '%.docx';
