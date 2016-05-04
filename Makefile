@@ -52,6 +52,8 @@ copytables:
 
 resetdb:
 	rm -rf $(workingdir)/dbfile
+fixup:
+	sqlite3 $(workingdir)/dbfile < fixup.sql
 db: resetdb initdb copytables
 	@echo 'Rebuilding Database...'
 qdb: $(queries)
@@ -60,9 +62,15 @@ clean:
 	rm -f $(queries)
 reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
-test: 
-	@echo $(queries)
+CAStatsByMonth.%.png: CAStatsByMonth.%.csv
+	gnuplot -e "xmin='2013-01';xmax='2016-04';title='$@';outfile='$@';infile='$<'" CAStatsByMonth.gnuplot
+CAStatsByDay.%.png: CAStatsByDay.%.csv
+	gnuplot -e "xmin='2013-01-01';xmax='2016-04-30';title='$@';outfile='$@';infile='$<'" CAStatsByDay.gnuplot
+churndistribution.png: churndistribution.csv
+	gnuplot -e "title='$@';outfile='$@';infile='$<'" churndistribution.gnuplot
 CAStatsByMonth.%.sql: CAStatsByMonth.sql.m4
+	m4 -D repoVar=$* $< > $@
+CAStatsByDay.%.sql: CAStatsByDay.sql.m4
 	m4 -D repoVar=$* $< > $@
 %.csv: %.sql
 	sqlite3 -init sqlite.csv.init $(workingdir)/dbfile < $< > $@
@@ -72,4 +80,4 @@ CAStatsByMonth.%.sql: CAStatsByMonth.sql.m4
 	sqlite3 -init sqlite.html.init  $(workingdir)/dbfile < $< >> $@
 	echo '</table>' >> $@
 deploy:
-	cp *.csv *.html *.css $(deploydir) 
+	cp *.csv *.html *.css *.png $(deploydir) 
