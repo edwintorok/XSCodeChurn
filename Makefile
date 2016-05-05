@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-.PHONY: gitlog initdb copytables resetdb clean reallyclean filerepomap
+.PHONY: gitlog initdb copytables resetdb clean reallyclean filerepomap test
 SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 configFile:=$(SELF_DIR)/.config.trunk
 config=$(lastword $(shell grep $(1) $(configFile)))
@@ -16,6 +16,8 @@ deploydir:=/var/www/pub
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
+repolist=$(shell cut -d, -f3 gitrepos.csv)
+CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
 queries=churnbyrepo.csv
 #queries=CAStatsByDay.csv CAStatsByMonth.csv
 #queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
@@ -81,3 +83,4 @@ CAStatsByDay.%.sql: CAStatsByDay.sql.m4
 	echo '</table>' >> $@
 deploy:
 	cp *.csv *.html *.css *.png $(deploydir) 
+test: $(CAbyMonthQs)
