@@ -1,21 +1,20 @@
-<h2>XenServer dev testing reports</h2>
-This is a series of reports obtained by data mining the git repos of XenServer<br>
-The purpose is to obtain metrics to repos and direct dev test activities.
-<h3>Database metrics</h4>
+<h2>XenServer defect density stats</h2>
+This is a series of defect density and code churn reports obtained by data mining the git repos of XenServer<br>
+<h3 style="color:red">In progress, figures are validated at the moment</h2>
+<!-- <h3>Database metrics</h4>
 <hr>
 This shows the numbers of various records the table contains.
 <ul>
 <li><a href="stats.html">tables and #records</a></li>
-</ul>
-<h3>XenServer codechurn reports over git repos</h4>
+</ul> -->
+<h3>XenServer defect density/ code churn reports over git repos</h4>
 <hr>
-This aims to direct developpers towards files and functions, which generate most defects, hence prime candidate for dev testing.
 <ul>
-<li><a href="churnbyrepo.html">code churn by repos ranked by number of CAs</a>   <a href="churnbyrepo.csv">[csv file]</a></li>
-<li><a href="churn.html">code churn by file ranked by number of CAs</a>   <a href="churn.csv">[csv file]</a></li>
-<li><a href="chunk.html">diff chunk (~function name) ranked by number of CA</a>   <a href="chunk.csv">[csv file]</a></li>
+<li><a href="statsbyrepo.html">defect density and churn by repos ranked by number of CAs</a>   <a href="statsbyrepo.csv">[csv file]</a></li>
+<!-- <li><a href="churn.html">code churn by file ranked by number of CAs</a>   <a href="churn.csv">[csv file]</a></li> -->
+<!-- <li><a href="chunk.html">diff chunk (~function name) ranked by number of CA</a>   <a href="chunk.csv">[csv file]</a></li> -->
 </ul>
-<h3>XenServer Repos inventory</h4>
+<!-- <h3>XenServer Repos inventory</h4>
 <hr>
 This shows basics metrics on XenServer repos and which use <a href="https://travis-ci.org/">travis-ci</a>and <a href="https://coveralls.io/">coveralls</a>
 <ul>
@@ -25,24 +24,56 @@ This shows basics metrics on XenServer repos and which use <a href="https://trav
 <hr>
 <ul>
 <li><a href="https://travis-ci.org/philippegabriel/xsastats">code churn for Xen by number of XSA</a></li>
-</ul>
+</ul> -->
 <h3>Detailed repo timeline analysis</h3>
 <hr>
-<h2>Datapath</h2>
+<h4>Datapath</h2>
 <table>
 <tr>
 <td><a href="CAStatsByMonth.blktap.git.png"><img src="CAStatsByMonth.blktap.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.sm.git.png"><img src="CAStatsByMonth.sm.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.sm-cli.git.png"><img src="CAStatsByMonth.sm-cli.git.png" height="160" width="240"></a></td>
 </tr>
+<tr>
+<td>blktap</td>
+<td>sm</td>
+<td>sm-cli</td>
+</tr>
 </table>
-<h2>ring3</h2>
+<h4>ring3</h2>
 <table>
+<tr>
+<td><a href="CAStatsByMonth.xen-api.git.png"><img src="CAStatsByMonth.xen-api.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.xenopsd.git.png"><img src="CAStatsByMonth.xenopsd.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.xcp-networkd.git.png"><img src="CAStatsByMonth.xcp-networkd.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.xcp-rrdd.git.png"><img src="CAStatsByMonth.xcp-rrdd.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.vgpu.git.png"><img src="CAStatsByMonth.vgpu.git.png" height="160" width="240"></a></td>
+</tr>
+<tr>
+<td>xen-api</td>
+<td>xenopsd.git</td>
+<td>xcp-networkd</td>
+<td>xcp-rrdd</td>
+<td>vgpu</td>
+</tr>
+<tr>
+<td><a href="CAStatsByMonth.forkexecd.git.png"><img src="CAStatsByMonth.forkexecd.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.squeezed.git.png"><img src="CAStatsByMonth.squeezed.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.v6.git.png"><img src="CAStatsByMonth.v6.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.shared-block-ring.git.png"><img src="CAStatsByMonth.shared-block-ring.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.xen-api-sdk.git.png"><img src="CAStatsByMonth.xen-api-sdk.git.png" height="160" width="240"></a></td>
+</tr>
+<tr>
+<td>forkexecd</td>
+<td>squeezed</td>
+<td>v6</td>
+<td>shared-block-ring</td>
+<td>xen-api-sdk</td>
+</tr>
 <tr>
 <td><a href="CAStatsByMonth.camldm.git.png"><img src="CAStatsByMonth.camldm.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.cdrom.git.png"><img src="CAStatsByMonth.cdrom.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.ffs.git.png"><img src="CAStatsByMonth.ffs.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.forkexecd.git.png"><img src="CAStatsByMonth.forkexecd.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.libvhd.git.png"><img src="CAStatsByMonth.libvhd.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
@@ -67,17 +98,12 @@ This shows basics metrics on XenServer repos and which use <a href="https://trav
 <td><a href="CAStatsByMonth.ocaml-xen-lowlevel-libs.git.png"><img src="CAStatsByMonth.ocaml-xen-lowlevel-libs.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
-<td><a href="CAStatsByMonth.ocaml-xenstore-clients.git.png"><img src="CAStatsByMonth.ocaml-xenstore-clients.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.ocaml-xenstore.git.png"><img src="CAStatsByMonth.ocaml-xenstore.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.rrd-transport.git.png"><img src="CAStatsByMonth.rrd-transport.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.shared-block-ring.git.png"><img src="CAStatsByMonth.shared-block-ring.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.squeezed.git.png"><img src="CAStatsByMonth.squeezed.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
 <td><a href="CAStatsByMonth.stdext.git.png"><img src="CAStatsByMonth.stdext.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.tapctl.git.png"><img src="CAStatsByMonth.tapctl.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.v6.git.png"><img src="CAStatsByMonth.v6.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.vgpu.git.png"><img src="CAStatsByMonth.vgpu.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.vhdd.git.png"><img src="CAStatsByMonth.vhdd.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
@@ -87,21 +113,17 @@ This shows basics metrics on XenServer repos and which use <a href="https://trav
 </tr>
 <tr>
 <td><a href="CAStatsByMonth.xcp-inventory.git.png"><img src="CAStatsByMonth.xcp-inventory.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.xcp-networkd.git.png"><img src="CAStatsByMonth.xcp-networkd.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.xcp-rrdd.git.png"><img src="CAStatsByMonth.xcp-rrdd.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xcp-rrd.git.png"><img src="CAStatsByMonth.xcp-rrd.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xen-api-client.git.png"><img src="CAStatsByMonth.xen-api-client.git.png" height="160" width="240"></a></td>
+<td><a href="CAStatsByMonth.ocaml-xenstore-clients.git.png"><img src="CAStatsByMonth.ocaml-xenstore-clients.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
-<td><a href="CAStatsByMonth.xen-api.git.png"><img src="CAStatsByMonth.xen-api.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xen-api-libs-specs.git.png"><img src="CAStatsByMonth.xen-api-libs-specs.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xen-api-libs-transitional.git.png"><img src="CAStatsByMonth.xen-api-libs-transitional.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.xen-api-sdk.git.png"><img src="CAStatsByMonth.xen-api-sdk.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
 <td><a href="CAStatsByMonth.xengt.git.png"><img src="CAStatsByMonth.xengt.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xenops-cli.git.png"><img src="CAStatsByMonth.xenops-cli.git.png" height="160" width="240"></a></td>
-<td><a href="CAStatsByMonth.xenopsd.git.png"><img src="CAStatsByMonth.xenopsd.git.png" height="160" width="240"></a></td>
 <td><a href="CAStatsByMonth.xenops.git.png"><img src="CAStatsByMonth.xenops.git.png" height="160" width="240"></a></td>
 </tr>
 <tr>
@@ -109,7 +131,7 @@ This shows basics metrics on XenServer repos and which use <a href="https://trav
 <td><a href="CAStatsByMonth.xenvm.git.png"><img src="CAStatsByMonth.xenvm.git.png" height="160" width="240"></a></td>
 </tr>
 </table>
-<h2>Misc</h2>
+<h4>Misc</h2>
 <table>
 <tr>
 <td><a href="CAStatsByMonth.vncterm.git.png"><img src="CAStatsByMonth.vncterm.git.png" height="160" width="240"></a></td>
