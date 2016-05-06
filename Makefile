@@ -12,13 +12,13 @@ workingdir:=$(call config,'workingdir')
 repos=$(workingdir)/repos.csv
 gitrepos:=$(workingdir)/gitrepos.csv
 #www params
-deploydir:=/var/www/pub
+deploydir:=/var/www/devtest
 #targets
 filerepomap=$(workingdir)/filerepomap.csv
 filemap=$(workingdir)/filemap.csv
 repolist=$(shell cut -d, -f3 gitrepos.csv)
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
-queries=churnbyrepo.csv
+queries=statsbyrepo.csv
 #queries=CAStatsByDay.csv CAStatsByMonth.csv
 #queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
 #queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
