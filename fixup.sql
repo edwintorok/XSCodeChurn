@@ -10,3 +10,5 @@ delete from filechurn where filename like 'docs/%';
 delete from filechurn where filename like '%/doc/%';
 delete from filechurn where filename like '%.doc';
 delete from filechurn where filename like '%.docx';
+-- forkexecd.git David Scott 2013-01-12 Remove everything but the fork/exec service rearrange file layout
+delete from filechurn where uuid='fd78a7e421920f78c08679e3d21d15109b401a31';
