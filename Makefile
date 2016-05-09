@@ -1,36 +1,24 @@
 #!/usr/bin/make -f
-.PHONY: gitlog initdb copytables resetdb clean reallyclean filerepomap test
-SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
-configFile:=$(SELF_DIR)/.config.trunk
-config=$(lastword $(shell grep $(1) $(configFile)))
-host:=$(call config,'host')
-dbname:=$(call config,'dbname')
-username:=$(call config,'username')
-password:=$(call config,'password')
-#git param
-workingdir:=$(call config,'workingdir')
-repos=$(workingdir)/repos.csv
-gitrepos:=$(workingdir)/gitrepos.csv
+.PHONY: gitlog gitsync login initdb copytables resetdb db qdb fixup clean reallyclean filerepomap deploy test
+#Which git repos are in scope
+gitrepos:=gitrepos.csv
+#Where git repos are synced and intermediary files generated
+workingdir:=/local/scratch/philippeg/trunkanalysis
 #www params
 deploydir:=/var/www/devtest
 #targets
-filerepomap=$(workingdir)/filerepomap.csv
-filemap=$(workingdir)/filemap.csv
-repolist=$(shell cut -d, -f3 gitrepos.csv)
+filerepomap:=$(workingdir)/filerepomap.csv
+filemap:=$(workingdir)/filemap.csv
+repolist:=$(shell cut -d, -f3 gitrepos.csv)
+#Histograms for individual repos
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
-queries=statsbyrepo.csv
-#queries=CAStatsByDay.csv CAStatsByMonth.csv
-#queries=CAbyFiles.csv chunkbyCA.csv chunk.csv churn.csv listrepos.csv churnbyrepo.csv
-#queries+=CAbyFiles.html chunkbyCA.html chunk.html churn.html listrepos.html churnbyrepo.html
-#queries+=inventory.html inventory.csv stats.csv stats.html
-#all: $(repos)  $(gitrepos) gitsync gitlog filerepomap filemap db qdb 
-all: $(repos)  $(gitrepos)
-$(repos):
-	grep -v '^#' gitrepos.csv > $@
-#	./genrepo2componentmap.sh $(workingdir) > $(repos)
-$(gitrepos): $(repos)
-	cp gitrepos.csv $@
-#	grep '.git$$' $< | sed 's/http:/git:/' > $@
+queriespng:=$(CAbyMonthQs) churndistribution.png
+#Top level reports
+queriescsv:=statsbyrepo.csv statsbyfile.csv
+querieshtml:=$(foreach i,$(queriescsv),$(subst .csv,.html,$(i)))
+queries:=$(queriescsv) $(querieshtml) $(queriespng)
+
+all:gitsync gitlog filerepomap filemap db churndistribution.png fixup qdb deploy
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
@@ -47,10 +35,10 @@ copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/repos.csv repos"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  gitrepos.csv repos"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/travis-ci.csv travisci"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/coveralls.csv coveralls"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  travis-ci.csv travisci"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  coveralls.csv coveralls"
 
 resetdb:
 	rm -rf $(workingdir)/dbfile
@@ -61,7 +49,7 @@ db: resetdb initdb copytables
 qdb: $(queries)
 	@echo 'Querying the db...' 
 clean: 
-	rm -f $(queries)
+	rm -f $(queriescsv) $(querieshtml) $(queriespng)
 reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 CAStatsByMonth.%.png: CAStatsByMonth.%.csv

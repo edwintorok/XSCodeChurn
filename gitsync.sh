@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #Sync a git repo, either by clone or pull
 #$1: local dir
 #stdin: list of repos

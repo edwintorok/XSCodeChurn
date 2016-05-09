@@ -4,7 +4,7 @@ forkexecd.git,https://travis-ci.org/xapi-project/forkexecd
 message-switch.git,https://travis-ci.org/xapi-project/message-switch
 mirage-block-volume.git,https://travis-ci.org/mirage/mirage-block-volume
 ocaml-crc.git,https://travis-ci.org/xapi-project/ocaml-crc
-ocaml-netlink
+ocaml-netlink,https://travis-ci.org/xapi-project/ocaml-netlink
 ocaml-rrdd-plugin.git,https://travis-ci.org/xapi-project/ocaml-rrdd-plugin
 ocaml-tar.git,https://travis-ci.org/xapi-project/ocaml-tar
 ocaml-vhd.git,https://travis-ci.org/djs55/ocaml-vhd
