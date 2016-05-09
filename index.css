@@ -14,3 +14,7 @@ TR:nth-child(odd) {background: #A7C942}
 p {
     text-indent: 50px;
 }
+.caption {
+	text-align: center;
+	font-weight: bold;
+}
