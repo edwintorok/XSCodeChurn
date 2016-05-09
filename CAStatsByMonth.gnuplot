@@ -15,6 +15,7 @@ set y2label "#CAs"
 set y2tics
 set y2range [0:*]
 set y2tics 1
+set ytics nomirror
 set autoscale y
 set boxwidth 3600*24*30
 set style fill solid 1.0
