@@ -1,5 +1,5 @@
 -- files ranked by #CA
-.print <caption>Repos ranked by #CAs</caption>
+.print <caption>Defect density and churn by git repos ranked by #CAs, since 2013</caption>
 with
 -- join gitcommit and filechurn for CAs group by uuid
 g as (select c.uuid,c.repo,c.date,c.jiratype,c.jiraid,sum(f.added) as sumchurn from gitcommit c inner join filechurn f on f.uuid=c.uuid where c.date > '2013-01-01' and c.jiratype='CA' group by c.uuid),
