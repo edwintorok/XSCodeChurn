@@ -1,0 +1,3 @@
+[submodule "cafromhfx"]
+	path = cafromhfx
+	url = https://gitlab.citrite.net/philippeg/cafromhfx.git
