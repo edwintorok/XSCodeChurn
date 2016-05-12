@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-.PHONY: gitlog gitsync login initdb copytables resetdb db qdb fixup clean reallyclean filerepomap deploy test
+.PHONY: gitlog gitsync login initdb copytables cafromhfxcsv resetdb db qdb fixup clean reallyclean filerepomap deploy test
 #Which git repos are in scope
 gitrepos:=gitrepos.csv
 #Where git repos are synced and intermediary files generated
@@ -27,12 +27,15 @@ filerepomap:
 	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $(filerepomap)
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
+cafromhfxcsv: cafromhfx/Makefile
+	make -C cafromhfx
 initdb: resetdb
 	sqlite3 $(workingdir)/dbfile < schema.sql
 login:
 	sqlite3 $(workingdir)/dbfile
 copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  cafromhfx/cafromhfx.csv CAs"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  gitrepos.csv repos"

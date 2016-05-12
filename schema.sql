@@ -7,6 +7,9 @@ CREATE TABLE gitcommit (
 	jiraid integer,
 	summary char(80)
 );
+CREATE TABLE CAs (
+jiraid integer
+);
 CREATE INDEX commit_uuid ON gitcommit (uuid);
 CREATE TABLE filechurn (
 	uuid char(40),
