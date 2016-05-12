@@ -6,12 +6,18 @@ data02 [label="filesystem\nworkingdir"];
 data03 [label="commit.git.csv\nfilechurn.git.csv"];
 data04 [label="filerepomap.csv"];
 data05 [label="filemap.csv"];
+data07 [label="JIRA DB\nHFX table"];
+data08 [label="cafromhfx.csv"];
+
 data06 [label="SQL DB"];
 data01 -> data02 [label="gitsync.sh"];
 data02 -> data03 [label="gitlog.sh"];
 data02 -> data04 [label="genfilerepomap.sh"];
 data04 -> data05 [label="genfilemap.sh"];
+data07 -> data08 [label="cafromhfx.sql"];
 data03 -> data06 [label="Makefile\ncopytables"];
 data05 -> data06 [label="Makefile\ncopytables"];
-{rank=same; data03 data05}
+data08 -> data06 [label="Makefile\ncopytables"];
+{rank=same; data03 data05 data08}
+{rank=same; data04 data07}
 }
