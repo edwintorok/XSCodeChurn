@@ -6,7 +6,7 @@ data02 [label="filesystem\nworkingdir"];
 data03 [label="commit.git.csv\nfilechurn.git.csv"];
 data04 [label="filerepomap.csv"];
 data05 [label="filemap.csv"];
-data07 [label="JIRA DB\nHFX table"];
+data07 [label="JIRA DB\n HFX table"];
 data08 [label="cafromhfx.csv"];
 
 data06 [label="SQL DB"];

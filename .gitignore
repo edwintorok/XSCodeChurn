@@ -7,3 +7,4 @@ dbfile
 !gitrepos.csv
 !travis-ci.csv
 *.png
+!diagram.png
