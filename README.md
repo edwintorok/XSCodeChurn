@@ -17,8 +17,17 @@ These csv files are then imported in a postgreSQL db [`schema.sql`](schema.sql),
 A number of SQL queries can then be run, e.g. [`churnbyCA.sql`](churnbyCA.sql), which returns a table containing: 
 * filename, repo, number of issues, total churn, loc, %churn
 
+workflow
 ----
+
 ![diagram](doc/diagram.png)
 
 
+dependencies
+----
+* [sqlite3](https://www.sqlite.org/)
+
+* [cloc](https://github.com/AlDanial/cloc)
+
+* [gnuplot](http://www.gnuplot.info/)
 
