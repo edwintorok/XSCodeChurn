@@ -1,5 +1,9 @@
+dbfile
 .config*
 *.html
-*.sql.csv
 !index.html
+*.csv
+!coveralls.csv
+!gitrepos.csv
+!travis-ci.csv
 *.png
