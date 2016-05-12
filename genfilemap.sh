@@ -10,12 +10,13 @@ do
 	repo=`echo $LINE | cut -d, -f1`
 	filename=`echo $LINE | cut -d, -f2`
 #extract file extension
-#TODO infer filetype from extension to compute loc more precisely
 	barename=$(basename "$filename")
 	extension="${barename##*.}"
 	[ "$extension" == "$barename" ] && extension='NIL'
 #find loc
-	loc=`cat "$1/$repo/$filename"|wc -l`
+#	loc=`cat "$1/$repo/$filename"|wc -l`
+	loc=`cloc --csv  "$1/$repo/$filename"| tail -n1 | cut -d, -f5`
+	echo $loc | grep -q 'ignored' && loc=0
 #output result
 	echo "$repo,$filename,$extension,$loc"
 done 
