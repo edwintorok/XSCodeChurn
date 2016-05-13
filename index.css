@@ -11,6 +11,11 @@ table {
 }
 TR:nth-child(even) {background: white}
 TR:nth-child(odd) {background: #A7C942}
+td {text-align: right}
+td:nth-child(1) {
+		text-align: left;
+		font-weight: bold
+}
 p {
     text-indent: 50px;
 }
