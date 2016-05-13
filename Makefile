@@ -14,7 +14,7 @@ repolist:=$(shell cut -d, -f3 gitrepos.csv)
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
 queriespng:=$(CAbyMonthQs) churndistribution.png
 #Top level reports
-queriescsv:=statsbyrepo.csv statsbyfile.csv
+queriescsv:=statsbyrepo.csv statsbyfile.csv statsbycomp.csv statsbyteam.csv
 querieshtml:=$(foreach i,$(queriescsv),$(subst .csv,.html,$(i)))
 queries:=$(queriescsv) $(querieshtml) $(queriespng)
 
@@ -40,6 +40,7 @@ copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  gitrepos.csv repos"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  component2team.csv component2team"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  travis-ci.csv travisci"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  coveralls.csv coveralls"
 

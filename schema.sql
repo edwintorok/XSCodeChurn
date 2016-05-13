@@ -37,6 +37,10 @@ CREATE TABLE repos (
 	url varchar(255),
 	name varchar(120)
 );
+CREATE TABLE component2team(
+	comp varchar(120),
+	team varchar(120)
+);
 CREATE TABLE travisci (
 	repo varchar(120),
 	url varchar(255)
