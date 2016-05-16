@@ -10,6 +10,14 @@ CREATE TABLE gitcommit (
 CREATE TABLE CAs (
 jiraid integer
 );
+CREATE TABLE openCAs (
+	team char(120),
+	blocker integer,
+	critical integer,
+	major integer,
+	minor integer,
+	trivial integer
+);
 CREATE INDEX commit_uuid ON gitcommit (uuid);
 CREATE TABLE filechurn (
 	uuid char(40),

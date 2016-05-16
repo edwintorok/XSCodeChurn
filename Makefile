@@ -36,6 +36,7 @@ login:
 copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  cafromhfx/cafromhfx.csv CAs"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  fetchOpenDefects/opendefects.csv openCAs"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  gitrepos.csv repos"
