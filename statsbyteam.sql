@@ -20,9 +20,9 @@ fc as (select comp,team,sum(sumrepoloc) as sumteamloc from f group by team),
 -- Get num of CAs and churn by team 
 gr as (select g2.team,count(distinct(g2.jiraid)) as cjid,count(distinct(g2.lcmjiraid)) as lcmcjid,sum(g2.sumchurn) as clc from g2 group by g2.team),
 -- Get Open CAs by team
-oCAs as (select team,blocker+critical+major+minor+trivial as sumdefects from OpenCAs order by team)
+oCAs as (select team,blocker*5+critical*3+major*1+minor*0.5+trivial*0.5 as sumdefects from OpenCAs order by team)
 --select * from gr order by team;
-select gr.team,gr.cjid as "#fixed CAs",o.sumdefects as "#open CAs",gr.lcmcjid as "#HFXs",gr.clc as "fixed CA LOC churn", fr.sumteamloc as "LOC",round(gr.clc*100/fr.sumteamloc,2) as "% churn",round((1000.0*gr.cjid)/fr.sumteamloc,2) as "#CAs/KLoc",round((1000.0    *o.sumdefects)/fr.sumteamloc,2) as "#open CAs/KLoc",round((1000.0*gr.lcmcjid)/fr.sumteamloc,2) as "#HFXs/KLoc"
+select gr.team,gr.cjid as "#fixed CAs",round(o.sumdefects) as "#open CAs",gr.lcmcjid as "#HFXs",gr.clc as "fixed CA LOC churn", fr.sumteamloc as "LOC",round(gr.clc*100/fr.sumteamloc,2) as "% churn",round((1000.0*gr.cjid)/fr.sumteamloc,2) as "#CAs/KLoc",round((1000.0*o.sumdefects)/fr.sumteamloc,2) as "#open CAs/KLoc",round((1000.0*gr.lcmcjid)/fr.sumteamloc,2) as "#HFXs/KLoc"
 from  gr
 inner join fc fr on fr.team=gr.team
 inner join oCAs o on o.team=gr.team
