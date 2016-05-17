@@ -2,6 +2,7 @@ api,xs-ring3
 api-libs,xs-ring3
 blktap,xs-datapath
 ocaml,xs-ring3
+pvtools,xs-datapath
 sm,xs-datapath
 v6,xs-ring3
 vgpu,xs-datapath

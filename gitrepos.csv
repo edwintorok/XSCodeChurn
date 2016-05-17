@@ -56,3 +56,5 @@ xentpm,git://hg.uk.xensource.com/carbon/trunk,xentpm.git
 xs-cim,git://hg.uk.xensource.com/carbon/trunk,xs-cim.git
 xsconsole,git://hg.uk.xensource.com/carbon/trunk,xsconsole.git
 xscontainer,git://hg.uk.xensource.com/carbon/trunk,xscontainer.git
+pvtools,https://github.com/xenserver,win-xenguestagent.git
+pvtools,https://github.com/xenserver,win-installer.git
