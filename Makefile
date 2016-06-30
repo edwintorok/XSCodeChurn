@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-.PHONY: gitlog gitsync login initdb copytables cafromhfxcsv resetdb db qdb fixup clean reallyclean filerepomap deploy test
+.PHONY: gitlog gitsync login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup clean reallyclean filerepomap deploy test
 #Which git repos are in scope
 gitrepos:=gitrepos.csv
 #Where git repos are synced and intermediary files generated
@@ -18,7 +18,7 @@ queriescsv:=statsbyrepo.csv statsbyfile.csv statsbycomp.csv statsbyteam.csv
 querieshtml:=$(foreach i,$(queriescsv),$(subst .csv,.html,$(i)))
 queries:=$(queriescsv) $(querieshtml) $(queriespng)
 
-all:gitsync gitlog filerepomap filemap db churndistribution.png fixup qdb deploy
+all:gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
@@ -29,6 +29,8 @@ filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap) > $(filemap)
 cafromhfxcsv: cafromhfx/Makefile
 	make -C cafromhfx
+fetchOpenDefects: fetchOpenDefects/Makefile
+	make -C fetchOpenDefects
 initdb: resetdb
 	sqlite3 $(workingdir)/dbfile < schema.sql
 login:
@@ -55,12 +57,14 @@ qdb: $(queries)
 	@echo 'Querying the db...' 
 clean: 
 	rm -f $(queriescsv) $(querieshtml) $(queriespng)
+	make -C cafromhfx clean
+	make -C fetchOpenDefects clean
 reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
 CAStatsByMonth.%.png: CAStatsByMonth.%.csv
-	gnuplot -e "xmin='2013-01';xmax='2016-04';title='$@';outfile='$@';infile='$<'" CAStatsByMonth.gnuplot
+	gnuplot -e "xmin='2013-01';xmax='2016-05';title='$@';outfile='$@';infile='$<'" CAStatsByMonth.gnuplot
 CAStatsByDay.%.png: CAStatsByDay.%.csv
-	gnuplot -e "xmin='2013-01-01';xmax='2016-04-30';title='$@';outfile='$@';infile='$<'" CAStatsByDay.gnuplot
+	gnuplot -e "xmin='2013-01-01';xmax='2016-05-30';title='$@';outfile='$@';infile='$<'" CAStatsByDay.gnuplot
 churndistribution.png: churndistribution.csv
 	gnuplot -e "title='$@';outfile='$@';infile='$<'" churndistribution.gnuplot
 CAStatsByMonth.%.sql: CAStatsByMonth.sql.m4
