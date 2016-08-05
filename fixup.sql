@@ -1,5 +1,12 @@
 delete from filechurn where churn=0;
-delete from filechurn where churn > 200 ;
+delete from filechurn where added=0;
+delete from filechurn where added=remvd;
+delete from filechurn where extension not in ('bash','c','cmd','cpp','csh','idl','java','m4','ml','mli','mly','py','rb','sh','vb','vbs');
+delete from filechurn where filename like 'setup.ml';
+delete from filechurn where filename like '%.xml';
+delete from filechurn where filename like '%.sql';
+delete from filechurn where filename like '%.eps';
+delete from filechurn where filename like '%.css';
 delete from filechurn where filename like '%.jpg';
 delete from filechurn where filename like '%.png';
 delete from filechurn where filename like '%.gif';
@@ -10,5 +17,3 @@ delete from filechurn where filename like 'docs/%';
 delete from filechurn where filename like '%/doc/%';
 delete from filechurn where filename like '%.doc';
 delete from filechurn where filename like '%.docx';
--- forkexecd.git David Scott 2013-01-12 Remove everything but the fork/exec service rearrange file layout
-delete from filechurn where uuid='fd78a7e421920f78c08679e3d21d15109b401a31';
