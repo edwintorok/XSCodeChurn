@@ -61,6 +61,8 @@ clean:
 	make -C fetchOpenDefects clean
 reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
+CAStatsByTeam.%.png: CAStatsByTeam.%.csv
+	gnuplot -e "xmin='2013-01';xmax='2016-07';title='$@';outfile='$@';infile='$<'" CAStatsByTeam.gnuplot
 CAStatsByMonth.%.png: CAStatsByMonth.%.csv
 	gnuplot -e "xmin='2013-01';xmax='2016-05';title='$@';outfile='$@';infile='$<'" CAStatsByMonth.gnuplot
 CAStatsByDay.%.png: CAStatsByDay.%.csv
@@ -71,6 +73,8 @@ CAStatsByMonth.%.sql: CAStatsByMonth.sql.m4
 	m4 -D repoVar=$* $< > $@
 CAStatsByDay.%.sql: CAStatsByDay.sql.m4
 	m4 -D repoVar=$* $< > $@
+CAStatsByTeam.%.sql: CAStatsByTeam.sql.m4
+	m4 -D teamVAR=$* $< > $@
 %.csv: %.sql
 	sqlite3 -init sqlite.csv.init $(workingdir)/dbfile < $< > $@
 %.html: %.sql
