@@ -6,5 +6,6 @@ dbfile
 !coveralls.csv
 !gitrepos.csv
 !travis-ci.csv
+!milestones.csv
 *.png
 !diagram.png
