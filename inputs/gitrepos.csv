@@ -1,5 +1,4 @@
 api,git://hg.uk.xensource.com/carbon/trunk,xen-api.git
-api-libs,git://hg.uk.xensource.com/carbon/trunk,xen-api-libs-specs.git
 api-libs,git://hg.uk.xensource.com/carbon/trunk,xen-api-libs-transitional.git
 api-libs,git://hg.uk.xensource.com/carbon/trunk,libvhd.git
 api-libs,git://hg.uk.xensource.com/carbon/trunk,ocaml-xen-lowlevel-libs.git

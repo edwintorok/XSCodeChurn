@@ -23,5 +23,5 @@ set style line 5 lt rgb "orange-red" lw 2
 plot 	infile using 1:3 with boxes lc rgb "green",\
 	infile using 1:4 with boxes lc rgb"royalblue",\
 	infile using 1:5 with lines ls 5 axes x1y2,\
-	"milestones.csv" using 1:2 with impulse lw 2,\
-	"milestones.csv" using 1:3:4 with labels rotate left
+	milestones using 1:2 with impulse lw 2,\
+	milestones using 1:3:4 with labels rotate left
