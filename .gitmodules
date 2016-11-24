@@ -1,6 +1,6 @@
 [submodule "cafromhfx"]
 	path = cafromhfx
-	url = https://gitlab.citrite.net/philippeg/cafromhfx.git
+	url = https://code.citrite.net/xsc/cafromhfx.git
 [submodule "fetchOpenDefects"]
 	path = fetchOpenDefects
-	url = https://gitlab.citrite.net/philippeg/fetchOpenDefects.git
+	url = https://code.citrite.net/xsc/fetchOpenDefects.git
