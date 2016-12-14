@@ -28,6 +28,11 @@ $(filerepomap):
 	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $@
 $(filemap): $(filerepomap)
 	./genfilemap.sh $(workingdir) < $< > $@
+ca.csv: $(workingdir)/commit.git.csv
+	sed -n 's/^[^,]*,[^,]*,[^,]*,[^,]*,CA,\([^,]*\).*/CA-\1/p' $< | sort | uniq > $@	
+tests.csv: ca.csv
+	./fetchTCsFromCAs.sh < $< > $@
+	sed -i 's/^CA-/CA,/' $@
 cafromhfxcsv: cafromhfx/Makefile
 	make -C cafromhfx
 fetchOpenDefects: fetchOpenDefects/Makefile
@@ -47,6 +52,7 @@ copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/coveralls.csv coveralls"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  tests.csv tests"
 
 resetdb:
 	rm -rf $(workingdir)/dbfile
@@ -81,8 +87,16 @@ CAStatsByTeam.%.sql: CAStatsByTeam.sql.m4
 %.html: %.sql
 	echo '<link rel="stylesheet" type="text/css" href="index.css">' > $@
 	echo '<table border="1">' >> $@
+	date >> $@
 	sqlite3 -init config/sqlite.html.init  $(workingdir)/dbfile < $< >> $@
 	echo '</table>' >> $@
 deploy:
 	cp *.csv *.html html/* *.png $(deploydir) 
-test: $(pngs)
+test:
+	sqlite3 -init config/sqlite.csv.init $(workingdir)/dbfile < sql/testsByAllFiles.sql
+test2:
+	m4 -D m4VARfilename='Agent/Collectors/XenCollectorBase.cs' sql/testsByFile.sql.m4 > sql/testsByFile.sql
+	sqlite3 -init config/sqlite.csv.init $(workingdir)/dbfile <  sql/testsByFile.sql
+wd:
+	echo $(workingdir)/dbfile
+

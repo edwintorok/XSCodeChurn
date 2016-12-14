@@ -58,3 +58,11 @@ CREATE TABLE coveralls (
 	repo varchar(120),
 	url varchar(255)
 );
+CREATE TABLE tests(
+	jiratype varchar(4),
+	jiraid integer,
+	xenrt_job integer,
+	xenrt_sequence varchar(120),
+	tc_id varchar(20),
+	tc_variant varchar(120)
+);
