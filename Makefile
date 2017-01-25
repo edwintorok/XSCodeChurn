@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 .SECONDARY:
-.PHONY: gitlog gitsync login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup clean reallyclean deploy test
+.PHONY: gitlog gitsync filerepomap filemap login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup clean reallyclean deploy test
 VPATH = sql/ gnuplot/ inputs/
 #Which git repos are in scope
 gitrepos:=inputs/gitrepos.csv
@@ -19,15 +19,15 @@ CAStatsByTeam:= CAStatsByTeam.xs-ring3.png
 pngs:=$(CAbyMonthQs) $(CAStatsByTeam) churndistribution.png
 htmls:=statsbyrepo.html statsbyfile.html statsbycomp.html statsbyteam.html
 targets:= $(htmls) $(pngs)
-all: gitsync gitlog $(filerepomap) $(filemap) cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
+all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
 gitsync:
 	./gitsync.sh $(workingdir)  < $(gitrepos)
 gitlog:
 	./gitlog.sh $(workingdir)  < $(gitrepos)
-$(filerepomap):
-	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $@
-$(filemap): $(filerepomap)
-	./genfilemap.sh $(workingdir) < $< > $@
+filerepomap:
+	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $(filerepomap)
+filemap:
+	./genfilemap.sh $(workingdir) < $(filerepomap)  > $(filemap)
 ca.csv: $(workingdir)/commit.git.csv
 	sed -n 's/^[^,]*,[^,]*,[^,]*,[^,]*,CA,\([^,]*\).*/CA-\1/p' $< | sort | uniq > $@	
 tests.csv: ca.csv
