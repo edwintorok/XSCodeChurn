@@ -1,0 +1,11 @@
+DROP TABLE gitcommit;
+DROP TABLE CAs;
+DROP TABLE openCAs;
+DROP TABLE filechurn;
+DROP TABLE chunk;
+DROP TABLE filemap;
+DROP TABLE repos;
+DROP TABLE component2team;
+DROP TABLE travisci;
+DROP TABLE coveralls;
+DROP TABLE tests;
