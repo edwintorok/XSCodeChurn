@@ -4,3 +4,6 @@
 [submodule "fetchOpenDefects"]
 	path = fetchOpenDefects
 	url = https://code.citrite.net/scm/xsc/fetchOpenDefects.git
+[submodule "psqlconfig"]
+	path = psqlconfig
+	url = ssh://git@code.citrite.net/~philippeg/config.xscodechurn.git
