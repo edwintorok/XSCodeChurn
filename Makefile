@@ -52,7 +52,7 @@ copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/coveralls.csv coveralls"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  tests.csv tests"
+#	sqlite3 --separator , $(workingdir)/dbfile ".import  tests.csv tests"
 
 resetdb:
 	rm -rf $(workingdir)/dbfile
