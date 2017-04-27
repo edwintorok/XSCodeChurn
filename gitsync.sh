@@ -7,18 +7,12 @@ do
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
-	remote=`echo $LINE | cut -d, -f2`
-	repo=`echo $LINE | cut -d, -f3`
-	dir=$1/$repo
-#echo  "$remote/$repo $dir"
-	if [ -e $dir ]
-	then
-		pushd $dir
-		git pull origin	
-		popd
-	else
-		git clone $remote/$repo $dir
-	fi
-done 
+pkg=`echo $LINE | cut -d, -f1`
+pushd $1
+echo  "processing $pkg"
+planex-buildenv run --no-tty generic -- planex-pin $pkg
+# clone the package repositories in the repos/ folder
+planex-buildenv run --no-tty generic -- planex-clone PINS/$pkg.pin
+popd
+done
 exit 0
-

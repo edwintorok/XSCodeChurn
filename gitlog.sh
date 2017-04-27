@@ -14,11 +14,12 @@ do
 #skip comments
 	echo $LINE | grep '^#' && continue
 #process line 
-	repo=`echo $LINE | cut -d, -f3`
+	repo=`echo $LINE | cut -d, -f2`
 	echo "Processing $repo..."
-	dir=$1/$repo
+	dir=$1/repos/$repo/
 #invoke git log - generate tab delimited output
 	pushd $dir
+#ls $dir
 	git log --encoding=UTF-8 --no-merges --date=short --pretty=format:"%H%x09$repo%x09%an%x09%ad%x09%s" >> $commitlog
 	git log --encoding=UTF-8 --numstat --no-merges --pretty=format:"%H%x09$repo" >> $filechurnlog
 	git log --encoding=UTF-8 -p --no-merges --pretty=format:"repo%x09$repo%x09uuid%x09%H" >> $chunklog

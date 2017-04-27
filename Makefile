@@ -3,15 +3,15 @@
 .PHONY: gitlog gitsync filerepomap filemap login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup clean reallyclean deploy test
 VPATH = sql/ gnuplot/ inputs/
 #Which git repos are in scope
-gitrepos:=inputs/gitrepos.csv
+specs:=inputs/specs.csv
 #Where git repos are synced and intermediary files generated
-workingdir:=/local/scratch/philippeg/trunkanalysis
+workingdir:=/local/scratch/philippeg/trunk-analysis/xenserver-specs
 #www params
 deploydir:=/var/www/devtest
 #targets
 filerepomap:=$(workingdir)/filerepomap.csv
 filemap:=$(workingdir)/filemap.csv
-repolist:=$(shell cut -d, -f3 $(gitrepos))
+repolist:=$(shell cut -d, -f3 $(specs))
 #Histograms for individual repos
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
 CAStatsByTeam:= CAStatsByTeam.xs-ring3.png
@@ -21,11 +21,11 @@ htmls:=statsbyrepo.html statsbyfile.html statsbycomp.html statsbyteam.html
 targets:= $(htmls) $(pngs)
 all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
 gitsync:
-	./gitsync.sh $(workingdir)  < $(gitrepos)
+	./gitsync.sh $(workingdir)  < $(specs)
 gitlog:
-	./gitlog.sh $(workingdir)  < $(gitrepos)
+	./gitlog.sh $(workingdir)  < $(specs)
 filerepomap:
-	./genfilerepomap.sh $(workingdir) < $(gitrepos) > $(filerepomap)
+	./genfilerepomap.sh $(workingdir) < $(specs) > $(filerepomap)
 filemap:
 	./genfilemap.sh $(workingdir) < $(filerepomap)  > $(filemap)
 ca.csv: $(workingdir)/commit.git.csv
@@ -47,7 +47,7 @@ copytables:
 	sqlite3 --separator , $(workingdir)/dbfile ".import  fetchOpenDefects/opendefects.csv openCAs"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(gitrepos) repos"
+	sqlite3 --separator , $(workingdir)/dbfile ".import  $(specs) repos"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
 	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
