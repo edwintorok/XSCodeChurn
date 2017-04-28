@@ -1,6 +1,7 @@
 #!/bin/bash
 #invoke git log on a set of repo
-#$1: local dir
+#$1: working dir
+#$2: specs dir
 #stdin: list of repos
 commitlog=$1/commit.git.log
 commitcsv=$1/commit.git.csv
@@ -16,7 +17,7 @@ do
 #process line 
 	repo=`echo $LINE | cut -d, -f2`
 	echo "Processing $repo..."
-	dir=$1/repos/$repo/
+	dir=$2/repos/$repo/
 #invoke git log - generate tab delimited output
 	pushd $dir
 #ls $dir

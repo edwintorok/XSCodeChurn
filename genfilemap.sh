@@ -1,6 +1,6 @@
 #!/bin/bash
 #generate map repo,file,extension,loc
-#$1: local dir
+#$1: specs dir
 #stdin: map file,repo
 while read LINE 
 do  
@@ -15,7 +15,7 @@ do
 	[ "$extension" == "$barename" ] && extension='NIL'
 #find loc
 #	loc=`cat "$1/$repo/$filename"|wc -l`
-	loc=`cloc --csv  "$1/$repo/$filename"| tail -n1 | cut -d, -f5`
+	loc=`cloc --csv  "$1/repos/$repo/$filename"| tail -n1 | cut -d, -f5`
 	echo $loc | grep -q 'ignored' && loc=0
 #output result
 	echo "$repo,$filename,$extension,$loc"

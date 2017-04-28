@@ -2,12 +2,15 @@
 .SECONDARY:
 .PHONY: gitlog gitsync filerepomap filemap login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup clean reallyclean deploy test
 VPATH = sql/ gnuplot/ inputs/
+#sqlite binary, requires at lease 3.8.3
+sqlitebin:=/local/scratch/philippeg/sqlite-tools-linux-x86-3180000/sqlite3
 #Which git repos are in scope
 specs:=inputs/specs.csv
 #Where git repos are synced and intermediary files generated
-workingdir:=/local/scratch/philippeg/trunk-analysis/xenserver-specs
+workingdir:=/local/scratch/philippeg/trunk-analysis
+specsdir:=$(workingdir)/xenserver-specs
 #www params
-deploydir:=/var/www/devtest
+deploydir:=~/deploydir
 #targets
 filerepomap:=$(workingdir)/filerepomap.csv
 filemap:=$(workingdir)/filemap.csv
@@ -21,13 +24,13 @@ htmls:=statsbyrepo.html statsbyfile.html statsbycomp.html statsbyteam.html
 targets:= $(htmls) $(pngs)
 all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
 gitsync:
-	./gitsync.sh $(workingdir)  < $(specs)
+	./gitsync.sh $(specsdir)  < $(specs)
 gitlog:
-	./gitlog.sh $(workingdir)  < $(specs)
+	./gitlog.sh $(workingdir)  $(specsdir) < $(specs)
 filerepomap:
-	./genfilerepomap.sh $(workingdir) < $(specs) > $(filerepomap)
+	./genfilerepomap.sh $(specsdir) < $(specs) > $(filerepomap)
 filemap:
-	./genfilemap.sh $(workingdir) < $(filerepomap)  > $(filemap)
+	./genfilemap.sh $(specsdir) < $(filerepomap)  > $(filemap)
 ca.csv: $(workingdir)/commit.git.csv
 	sed -n 's/^[^,]*,[^,]*,[^,]*,[^,]*,CA,\([^,]*\).*/CA-\1/p' $< | sort | uniq > $@	
 tests.csv: ca.csv
@@ -38,36 +41,37 @@ cafromhfxcsv: cafromhfx/Makefile
 fetchOpenDefects: fetchOpenDefects/Makefile
 	make -C fetchOpenDefects
 initdb: resetdb
-	sqlite3 $(workingdir)/dbfile < sql/schema.sql
+	$(sqlitebin) $(workingdir)/dbfile < sql/schema.sql
 login:
-	sqlite3 $(workingdir)/dbfile
+	$(sqlitebin) $(workingdir)/dbfile
 copytables:
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  cafromhfx/cafromhfx.csv CAs"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  fetchOpenDefects/opendefects.csv openCAs"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(specs) repos"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
-	sqlite3 --separator , $(workingdir)/dbfile ".import  inputs/coveralls.csv coveralls"
-#	sqlite3 --separator , $(workingdir)/dbfile ".import  tests.csv tests"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/commit.git.csv gitcommit"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  cafromhfx/cafromhfx.csv CAs"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  fetchOpenDefects/opendefects.csv openCAs"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/filechurn.git.csv filechurn"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(specs) repos"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
+	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/coveralls.csv coveralls"
+#	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  tests.csv tests"
 
 resetdb:
 	rm -rf $(workingdir)/dbfile
 fixup:
-	sqlite3 $(workingdir)/dbfile < sql/fixup.sql
+	$(sqlitebin) $(workingdir)/dbfile < sql/fixup.sql
 db: resetdb initdb copytables
 	@echo 'Rebuilding Database...'
 qdb: $(targets)
 	@echo 'Querying the db...' 
 clean: 
 	rm -f *.sql *.csv *.png *.html
-	make -C cafromhfx clean
-	make -C fetchOpenDefects clean
+#	make -C cafromhfx clean
+#	make -C fetchOpenDefects clean
 reallyclean: clean resetdb
 	rm -f $(workingdir)/*.log
+	rm -f $(workingdir)/*.csv
 CAStatsByTeam.%.png: CAStatsByTeam.%.csv
 	gnuplot -e "xmin='2013-01';xmax='2016-07';title='$@';outfile='$@';infile='$<';milestones='inputs/milestones.csv'" gnuplot/CAStatsByTeam.gnuplot
 CAStatsByMonth.%.png: CAStatsByMonth.%.csv
@@ -83,20 +87,20 @@ CAStatsByDay.%.sql: CAStatsByDay.sql.m4
 CAStatsByTeam.%.sql: CAStatsByTeam.sql.m4
 	m4 -D teamVAR=$* $< > $@
 %.csv: %.sql
-	sqlite3 -init config/sqlite.csv.init $(workingdir)/dbfile < $< > $@
+	$(sqlitebin) -init config/sqlite.csv.init $(workingdir)/dbfile < $< > $@
 %.html: %.sql
 	echo '<link rel="stylesheet" type="text/css" href="index.css">' > $@
 	echo '<table border="1">' >> $@
 	date >> $@
-	sqlite3 -init config/sqlite.html.init  $(workingdir)/dbfile < $< >> $@
+	$(sqlitebin) -init config/sqlite.html.init  $(workingdir)/dbfile < $< >> $@
 	echo '</table>' >> $@
 deploy:
 	cp *.csv *.html html/* *.png $(deploydir) 
 test:
-	sqlite3 -init config/sqlite.csv.init $(workingdir)/dbfile < sql/testsByAllFiles.sql
+	$(sqlitebin) -init config/sqlite.csv.init $(workingdir)/dbfile < sql/testsByAllFiles.sql
 test2:
 	m4 -D m4VARfilename='Agent/Collectors/XenCollectorBase.cs' sql/testsByFile.sql.m4 > sql/testsByFile.sql
-	sqlite3 -init config/sqlite.csv.init $(workingdir)/dbfile <  sql/testsByFile.sql
+	$(sqlitebin) -init config/sqlite.csv.init $(workingdir)/dbfile <  sql/testsByFile.sql
 wd:
 	echo $(workingdir)/dbfile
 
