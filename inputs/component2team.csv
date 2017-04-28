@@ -1,4 +1,4 @@
-blktap,xs-ring0
+blktap,xs-datapath
 ffs,xs-ring3
 forkexecd,xs-ring3
 message-switch,xs-ring3
@@ -22,6 +22,7 @@ xapi,xs-ring3
 xcp-networkd,xs-ring3
 xcp-rrdd,xs-ring3
 xen,xs-ring0
+xencenter,xs-gui
 xengt,xs-ring3
 xenops-cli,xs-ring3
 xenopsd,xs-ring3

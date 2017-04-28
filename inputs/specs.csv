@@ -22,6 +22,7 @@ xapi,xen-api
 xcp-networkd,xcp-networkd
 xcp-rrdd,xcp-rrdd
 xen,xen
+xencenter,xencenter
 xengt,xengt-4.x
 xenops-cli,xenops-cli
 xenopsd,xenopsd

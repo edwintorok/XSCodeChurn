@@ -14,7 +14,7 @@ deploydir:=~/deploydir
 #targets
 filerepomap:=$(workingdir)/filerepomap.csv
 filemap:=$(workingdir)/filemap.csv
-repolist:=$(shell cut -d, -f3 $(specs))
+repolist:=$(shell cut -d, -f2 $(specs))
 #Histograms for individual repos
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
 CAStatsByTeam:= CAStatsByTeam.xs-ring3.png
