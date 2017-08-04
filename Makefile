@@ -10,7 +10,7 @@ specs:=inputs/specs.csv
 workingdir:=/local/scratch/philippeg/trunk-analysis
 specsdir:=$(workingdir)/xenserver-specs
 #www params
-deploydir:=~/deploydir
+deploydir:=~/public_html/staging/
 #targets
 filerepomap:=$(workingdir)/filerepomap.csv
 filemap:=$(workingdir)/filemap.csv
@@ -19,10 +19,13 @@ repolist:=$(shell cut -d, -f2 $(specs))
 CAbyMonthQs=$(foreach i,$(repolist),CAStatsByMonth.$(i).png)
 CAStatsByTeam:= CAStatsByTeam.xs-ring3.png
 #Top level reports
-pngs:=$(CAbyMonthQs) $(CAStatsByTeam) churndistribution.png
-htmls:=statsbyrepo.html statsbyfile.html statsbycomp.html statsbyteam.html
-targets:= $(htmls) $(pngs)
-all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db churndistribution.png fixup qdb deploy
+pngs:=$(CAbyMonthQs) $(CAStatsByTeam)
+queries:=statsbyrepo.sql statsbyfile.sql statsbycomp.sql statsbyteam.sql OpenDefectDensity.sql
+htmls:=$(subst .sql,.html,$(queries))
+csvs:=$(subst .sql,.csv,$(queries))
+targets:= $(htmls) $(csvs)
+#targets:= $(htmls) $(csvs) $(pngs)
+all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db fixup qdb deploy
 gitsync:
 	./gitsync.sh $(specsdir)  < $(specs)
 gitlog:
@@ -101,6 +104,6 @@ test:
 test2:
 	m4 -D m4VARfilename='Agent/Collectors/XenCollectorBase.cs' sql/testsByFile.sql.m4 > sql/testsByFile.sql
 	$(sqlitebin) -init config/sqlite.csv.init $(workingdir)/dbfile <  sql/testsByFile.sql
-wd:
-	echo $(workingdir)/dbfile
+test3:
+	echo $(targets)
 
