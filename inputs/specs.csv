@@ -30,7 +30,6 @@ xcp-networkd,xcp-networkd
 xcp-python-libs,xcp-python-libs
 xcp-rrdd,xcp-rrdd
 xenadmin,xenadmin
-xengt,xengt-4.x
 xenops-cli,xenops-cli
 xenopsd,xenopsd
 xen,xen
