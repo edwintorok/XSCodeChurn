@@ -39,7 +39,8 @@ CREATE TABLE filemap (
 	repo varchar(120),
 	filename varchar(200),
 	extension varchar(30),
-	loc integer
+	loc integer,
+	type integer default 1
 );
 CREATE TABLE repos (
 	comp varchar(120),

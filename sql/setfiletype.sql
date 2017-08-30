@@ -1,0 +1,16 @@
+UPDATE filemap SET type=0 where extension not in ('bash','c','cmd','cpp','csh','cs','idl','java','m4','ml','mli','mly','py','rb','sh','vb','vbs');
+UPDATE filemap SET type=0 where filename like 'doc/%';
+UPDATE filemap SET type=0 where filename like 'docs/%';
+UPDATE filemap SET type=0 where filename like '%/doc/%';
+UPDATE filemap SET type=0 where filename like '%/docs/%';
+UPDATE filemap SET type=0  WHERE filename='setup.ml';
+UPDATE filemap SET type=0  WHERE filename like '%/setup.ml';
+UPDATE filemap SET type=0  WHERE filename='myocamlbuild.ml';
+UPDATE filemap SET type=0  WHERE filename='Makefile';
+UPDATE filemap SET type=0  WHERE filename like '%/Makefile';
+UPDATE filemap SET type=0  WHERE filename like 'test/%';
+UPDATE filemap SET type=0  WHERE filename like '%/test/%';
+UPDATE filemap SET type=0  WHERE filename like 'test%/%';
+UPDATE filemap SET type=0  WHERE filename like '%/test%/%';
+UPDATE filemap SET type=0  WHERE filename like '%_test/%';
+UPDATE filemap SET type=0  WHERE filename like '%/%_test/%';

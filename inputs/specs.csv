@@ -12,12 +12,10 @@ ocaml-tapctl,tapctl
 ocaml-xcp-idl,xcp-idl
 ocaml-xen-api-libs-transitional,xen-api-libs-transitional
 ocaml-xenops,xenops
-rrdd-plugins,rrd2csv
 sm-cli,sm-cli
 sm,sm
 squeezed,squeezed
 v6d,v6
-vgpu,vgpu
 vhd-tool,vhd-tool
 vmss,vmss
 vncterm,vncterm
@@ -29,7 +27,6 @@ xapi,xen-api
 xcp-networkd,xcp-networkd
 xcp-python-libs,xcp-python-libs
 xcp-rrdd,xcp-rrdd
-xenadmin,xenadmin
 xenops-cli,xenops-cli
 xenopsd,xenopsd
 xen,xen
