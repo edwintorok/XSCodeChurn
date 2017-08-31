@@ -18,6 +18,6 @@ do
 	loc=`cloc --csv  "$1/repos/$repo/$filename"| tail -n1 | cut -d, -f5`
 	echo $loc | grep -q 'ignored' && loc=0
 #output result
-	echo "$repo,$filename,$extension,$loc"
+	echo "$repo,$filename,$extension,$loc,1"
 done 
 exit 0

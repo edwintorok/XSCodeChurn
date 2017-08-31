@@ -19,7 +19,7 @@ while(<>){
 #fixup any git special format
 	$plus =~ /[^0-9]/  and $plus=0;
 	$minus =~ /[^0-9]/ and $minus=0;
-	print "$uuid,$repo,$plus,$minus,",$plus+$minus,",$filename,$ext\n";
+	print "$uuid,$repo,$plus,$minus,",$plus+$minus,",$filename,$ext,1\n";
 }
 exit 0;
 #/usr/bin/perl

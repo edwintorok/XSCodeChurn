@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 .SECONDARY:
-.PHONY: gitlog gitsyncXformer gitsyncMirror gitsync filerepomap filemap login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb fixup setfiletype clean reallyclean deploy test
+.PHONY: gitlog gitsyncXformer gitsyncMirror gitsync filerepomap filemap login initdb copytables cafromhfxcsv fetchOpenDefects resetdb db qdb setfiletype clean reallyclean deploy test
 VPATH = sql/ gnuplot/ inputs/
 #sqlite binary, requires at lease 3.8.3
 sqlitebin:=/local/scratch/philippeg/sqlite-tools-linux-x86-3180000/sqlite3
@@ -12,8 +12,8 @@ mirrors:=inputs/mirrorRepos.csv
 workingdir:=/local/scratch/philippeg/trunk-analysis
 specsdir:=$(workingdir)/xenserver-specs
 #Dates
-beginDate:='2017-04-01'
-endDate:='2017-07-01'
+beginDate:='2017-06-01'
+endDate:='2017-09-01'
 #www params
 deploydir:=~/public_html/staging/
 #targets
@@ -30,7 +30,7 @@ htmls:=$(subst .sql,.html,$(queries))
 csvs:=$(subst .sql,.csv,$(queries))
 #targets:= $(htmls) $(csvs)
 targets:= $(htmls) $(csvs) $(pngs)
-all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db fixup setfiletype qdb deploy
+all: gitsync gitlog filerepomap filemap cafromhfxcsv fetchOpenDefects db setfiletype qdb deploy
 gitsync: gitsyncXformer gitsyncMirror
 gitsyncXformer:
 	./gitsync-xformer.sh $(specsdir)  < $(specs)
@@ -65,7 +65,6 @@ copytables:allrepos.csv
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/chunk.git.csv chunk"
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $< repos"
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  $(workingdir)/filemap.csv filemap"
-	$(sqlitebin) --separator , $(workingdir)/dbfile "UPDATE filemap SET type=1;"
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/component2team.csv component2team"
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/travis-ci.csv travisci"
 	$(sqlitebin) --separator , $(workingdir)/dbfile ".import  inputs/coveralls.csv coveralls"
@@ -117,6 +116,3 @@ deploy:
 	cp *.csv *.html html/* *.png $(deploydir) 
 test:
 	$(sqlitebin) --separator , $(workingdir)/dbfile "UPDATE filemap SET type=1;"
-sql/churnByrepoBydate.csv: sql/churnByrepoBydate.m4
-	m4 -D m4BeginDate='2017-04-01'  -D m4EndDate='2017-07-01'  sql/churnByrepoBydate.m4 >  sql/churnByrepoBydate.sql
-	$(sqlitebin) -init config/sqlite.csv.init $(workingdir)/dbfile <   sql/churnByrepoBydate.sql > $@

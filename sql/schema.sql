@@ -26,7 +26,8 @@ CREATE TABLE filechurn (
 	remvd integer,
 	churn integer,
 	filename varchar(200),
-	extension varchar(30)
+	extension varchar(30),
+	type integer default 1
 );
 CREATE TABLE chunk (
 	uuid char(40),
